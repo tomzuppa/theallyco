@@ -1,0 +1,44 @@
+# Byte-compiled Python files
+__pycache__/
+*.py[cod]
+
+# SQLite database file (used in local development)
+*.sqlite3
+
+# Log files
+*.log
+logs/
+
+# Django media files (user uploads)
+media/
+
+# Static files that Django collects (only if using collectstatic)
+staticfiles/
+
+# Environment variables
+.env
+config/.env
+
+# Virtual environments (common names)
+env/
+venv/
+.venv/
+
+# VSCode and editor-specific files
+.vscode/
+.idea/
+
+# System files (macOS/Linux/Windows)
+.DS_Store
+Thumbs.db
+
+# Migrations (optional: comment this out if you want to track migrations)
+# You may want to ignore initial migrations during early development
+# */migrations/*.py
+# */migrations/__pycache__/
+
+# Python egg info (in case you package your app)
+*.egg-info/
+
+# Cache folders
+.cache/
