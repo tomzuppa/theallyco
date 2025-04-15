@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  web:
+    # 🛠 Build from the Dockerfile in the root context
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+
+    # 🐳 Container name for easier debugging
+    container_name: django_web
+
+    # 🚀 Main command to run the app inside the container
+    command: >
+      sh -c "
+        echo '🛠 Applying migrations...' &&
+        python manage.py migrate &&
+        
+        # 👇 Development mode: use Django built-in server
+        python manage.py runserver 0.0.0.0:8000
+
+        # 👇 Production mode (comment above, uncomment below):
+        # gunicorn project_root.wsgi:application --bind 0.0.0.0:8000
+      "
+
+    # 🔄 Mount project directory inside the container for live reload
+    volumes:
+      - ..:/app
+
+    # 🌐 Map container port 8000 to host port 8000
+    ports:
+      - "8000:8000"
+
+    # 🔐 Load environment variables from your .env file
+    env_file:
+      - ../.env
+
+    # 🔁 Auto-restart if the container stops
+    restart: unless-stopped
+
