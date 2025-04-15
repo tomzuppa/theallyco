@@ -1,0 +1,8 @@
+# Inherit base dependencies
+-r base.txt
+
+# Interactive shell for easier testing and debugging
+ipython
+
+# Debug toolbar for viewing SQL queries, cache hits, template rendering time, etc.
+django-debug-toolbar

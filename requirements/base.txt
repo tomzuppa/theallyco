@@ -1,0 +1,5 @@
+# Core Django framework (LTS version)
+Django>=5.2,<5.3
+
+# Secure environment variable loading
+python-decouple

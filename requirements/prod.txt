@@ -1,0 +1,8 @@
+# Inherit base dependencies
+-r base.txt
+
+# WSGI HTTP server for production
+gunicorn
+
+# Serves static files directly in production (used with WhiteNoiseMiddleware)
+whitenoise
