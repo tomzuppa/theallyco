@@ -43,3 +43,7 @@ Thumbs.db
 
 # Cache folders
 .cache/
+
+#Secrets (json file for gcp)
+/secrets/*
+!/secrets/secrets_template.json
