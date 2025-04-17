@@ -28,8 +28,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks', # Allows tweaking form field rendering attributes in templates (e.g., adding CSS classes).
+
 
     # Your custom apps go here
+    'apps.users'  #login / logout
 
 ]
 
@@ -59,6 +62,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'project_root.settings.context_processors.current_year',  #assigning dinamically the current year (templates)
+
             ],
         },
     },
@@ -87,6 +92,7 @@ USE_TZ = True
 # Static file settings (CSS, JS, images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Media files (user uploads)
 MEDIA_URL = '/media/'
@@ -94,3 +100,17 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 🔐 Custom user model configuration
+# This tells Django to use our CustomUser model instead of the default User
+AUTH_USER_MODEL = 'users.CustomUser'
+
+# Path to the root URL configuration file (urls.py)
+# This tells Django which module contains the main URL declarations
+ROOT_URLCONF = 'project_root.urls'
+
+# 🔐 Default path to redirect after successful login
+LOGIN_REDIRECT_URL = '/'
+
+# 🔐 Default login view for @login_required decorators
+LOGIN_URL = 'users:login'

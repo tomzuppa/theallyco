@@ -1,0 +1,116 @@
+/* ----------------------------
+   🌐 Global color palette
+---------------------------- */
+:root {
+    --color-primary: #000000;       /* Main black */
+    --color-secondary: #f5f5f5;     /* Light background */
+    --color-accent: #0066ff;        /* Accent blue */
+    --color-text: #333333;          /* Main text */
+    --color-border: #cccccc;        /* Inputs border */
+}
+
+/* ----------------------------
+   📄 Base layout
+---------------------------- */
+body {
+    background-color: #e4e7eb;  /* Metallic-inspired grey */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* ----------------------------
+   🧱 Reusable containers
+---------------------------- */
+.container-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    padding: 2rem;
+}
+
+/* ----------------------------
+   🧾 Card component
+---------------------------- */
+.card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+}
+
+/* ----------------------------
+   🧩 Form elements
+---------------------------- */
+.input {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    width: 100%;
+    transition: border-color 0.3s;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.input:focus {
+    border-color: var(--color-accent);
+    outline: none;
+}
+
+.btn {
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    width: 100%;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: var(--color-accent);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0051cc;
+}
+
+/* ----------------------------
+   🔗 Utility links
+---------------------------- */
+.link-muted {
+    font-size: 0.8rem;
+    color: #999999;
+    text-decoration: underline;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+/* ----------------------------
+   🔻 Footer sticky
+---------------------------- */
+/* ----------------------------
+   🔻 Footer fixed and centered
+---------------------------- */
+.footer-fixed {
+    font-size: 0.8rem;
+    color: #888;
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 1000;
+}

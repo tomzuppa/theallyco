@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load widget_tweaks %} {# Third-party form styling #}
+
+{% block title %}Login - Secure Access{% endblock %}
+
+{% block content %}
+<div class="container-center">
+    <div class="card">
+        <h2 class="mb-4">Welcome Back</h2>
+
+        {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            Invalid credentials. Please try again.
+        </div>
+        {% endif %}
+
+        <form method="POST" novalidate>
+            {% csrf_token %}
+            <div>
+                <label for="username" class="form-label">Username</label>
+                {{ form.username|add_class:"input" }}
+            </div>
+            <div>
+                <label for="password" class="form-label">Password</label>
+                {{ form.password|add_class:"input" }}
+            </div>
+            <button type="submit" class="btn btn-primary">Log In</button>
+        </form>
+
+        <a href="#" class="link-muted">Forgot your password?</a>
+    </div>
+</div>
+{% endblock %}

@@ -3,3 +3,5 @@ Django>=5.2,<5.3
 
 # Secure environment variable loading
 python-decouple
+
+django-widget-tweaks  # For form field customization in templates
