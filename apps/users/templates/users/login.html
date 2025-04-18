@@ -1,33 +1,54 @@
 {% extends "base.html" %}
-{% load widget_tweaks %} {# Third-party form styling #}
+{% load widget_tweaks %}
 
 {% block title %}Login - Secure Access{% endblock %}
 
+{% block body_class %}login-dark{% endblock %}
 {% block content %}
-<div class="container-center">
-    <div class="card">
-        <h2 class="mb-4">Welcome Back</h2>
+<div class="login-dark-container">
+    <div class="login-dark-card">
 
-        {% if form.errors %}
-        <div class="alert alert-danger" role="alert">
-            Invalid credentials. Please try again.
+        <!-- Top Icon -->
+        <div class="login-dark-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0z"/>
+                <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+            </svg>
         </div>
-        {% endif %}
+
+        <h2>Sign in to Your Account</h2>
 
         <form method="POST" novalidate>
             {% csrf_token %}
             <div>
-                <label for="username" class="form-label">Username</label>
-                {{ form.username|add_class:"input" }}
+                <label for="username">Username</label>
+                {{ form.username|add_class:"login-dark-input" }}
             </div>
             <div>
-                <label for="password" class="form-label">Password</label>
-                {{ form.password|add_class:"input" }}
+                <label for="password">Password</label>
+                {{ form.password|add_class:"login-dark-input" }}
             </div>
-            <button type="submit" class="btn btn-primary">Log In</button>
+
+            <div class="login-dark-remember">
+                <input type="checkbox" id="keep-signed" name="keep-signed">
+                <label for="keep-signed">Keep me signed in</label>
+            </div>
+
+            <button type="submit" class="login-dark-button">Log In</button>
         </form>
 
-        <a href="#" class="link-muted">Forgot your password?</a>
+        <div class="login-dark-links">
+            <a href="#">Forgot your password?</a>
+            <a href="#">Create Account</a>
+        </div>
+
     </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div class="footer-dark">
+    <a href="#">Privacy Policy</a>
+    <span>© {{ current_year }} — All Rights Reserved</span>
 </div>
 {% endblock %}

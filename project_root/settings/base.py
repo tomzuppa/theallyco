@@ -114,3 +114,26 @@ LOGIN_REDIRECT_URL = '/'
 
 # 🔐 Default login view for @login_required decorators
 LOGIN_URL = 'users:login'
+
+LOGOUT_REDIRECT_URL = 'users:login'  # 🔄 Redirect to login after logout
+
+
+# ----------------------------------------
+# 🔐 Authentication Redirection Settings
+# ----------------------------------------
+
+# The URL where requests are redirected for login.
+# This is used when the @login_required decorator is triggered
+LOGIN_URL = '/users/login/'
+
+# After a successful login, the user will be redirected to this URL.
+# Typically used for dashboard or landing page after authentication
+LOGIN_REDIRECT_URL = '/dashboard/'
+
+# After logout, redirect the user to the login page
+LOGOUT_REDIRECT_URL = '/users/login/'
+
+# Server addres for GCP development environment (replace in production)
+CSRF_TRUSTED_ORIGINS = [
+    'https://8000-cs-61983882132-default.cs-us-central1-pits.cloudshell.dev',
+]

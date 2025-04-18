@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Home{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <!-- 🔒 Top navigation bar with logo, links, and user info -->
+    <header class="navbar-dark">
+        <div class="navbar-left">📊 BAOBYTE</div>
+        <nav class="navbar-links">
+            <!-- 🧭 Navigation menu -->
+            <a href="#">Dashboard</a>
+            <a href="#">Reports</a>
+            <a href="#">Analytics</a>
+            <a href="#">Settings</a>
+            <a href="#">News</a>
+        
+            <span class="divider">|</span>
+            <a href="{% url 'users:logout' %}">Logout </a>
+        
+            <!-- 👤 User info section with pipe separator -->
+            <div class="navbar-user-info">
+                <span class="divider">|</span>
+            
+                <!-- Avatar toggle dropdown -->
+                <div class="user-avatar" onclick="toggleUserMenu()">👤</div>
+            
+                <!-- Username and date -->
+                <span class="user-name">{{ user.username }}</span>
+                {% comment %} <span class="current-date">{{ current_date }}</span> {% endcomment %}
+            
+                <!-- Dropdown menu -->
+                <div id="user-dropdown" class="user-dropdown hidden">
+                    <a href="#">👁️ View Profile</a>
+                    <a href="#">✏️ Edit Profile</a>
+                    <a href="#">🔐 Change Password</a>
+                    <a href="#">🔔 Notifications</a>
+                    <a href="#">🌓 Dark Mode</a>
+                    {% comment %} <a href="#">🚪 Logout</a> {% endcomment %}
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 🧩 Central dashboard content -->
+    <div class="dashboard-content">
+
+        <!-- 📊 Section: Quick stats overview -->
+        <section class="dashboard-section">
+            <h2>Quick Stats</h2>
+            <ul>
+                <li>📈 <strong>Sales:</strong> $25,000</li>
+                <li>📦 <strong>Orders:</strong> 1,210</li>
+                <li>🛠️ <strong>Projects:</strong> 4 Active</li>
+            </ul>
+        </section>
+
+        <!-- 🔗 Section: Navigational links -->
+        <section class="dashboard-section">
+            <h2>Quick Links</h2>
+            <ul>
+                <li><a href="#">Client Dashboard</a></li>
+                <li><a href="#">Module: Scorecard</a></li>
+                <li><a href="#">Documentation</a></li>
+            </ul>
+        </section>
+
+    </div>
+</div>
+{% endblock %}

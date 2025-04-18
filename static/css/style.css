@@ -1,34 +1,36 @@
-/* ----------------------------
-   🌐 Global color palette
----------------------------- */
+/* =============================================================
+   🌐 Global Theme Variables (Typography, Colors, Spacing)
+============================================================= */
 :root {
     --color-primary: #000000;       /* Main black */
-    --color-secondary: #f5f5f5;     /* Light background */
+    --color-secondary: #f5f5f5;     /* Light backgrounds */
     --color-accent: #0066ff;        /* Accent blue */
-    --color-text: #333333;          /* Main text */
-    --color-border: #cccccc;        /* Inputs border */
+    --color-text: #e0e0e0;          /* Light text for dark mode */
+    --color-muted: #888888;         /* Muted text color */
+    --color-border: #cccccc;        /* Input borders */
 }
 
-/* ----------------------------
-   📄 Base layout
----------------------------- */
+/* =============================================================
+   📄 Base Layout Styling for the Entire App
+============================================================= */
 body {
-    background-color: #e4e7eb;  /* Metallic-inspired grey */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
 
-/* ----------------------------
-   🧱 Reusable containers
----------------------------- */
+body.light {
+    background-color: #121314;  /* Fallback background for light mode */
+    color: var(--color-text);
+}
+
+/* =============================================================
+   📦 Reusable Containers and Cards
+============================================================= */
 .container-center {
     display: flex;
     justify-content: center;
@@ -37,9 +39,6 @@ body {
     padding: 2rem;
 }
 
-/* ----------------------------
-   🧾 Card component
----------------------------- */
 .card {
     background-color: #ffffff;
     border-radius: 12px;
@@ -50,17 +49,17 @@ body {
     text-align: center;
 }
 
-/* ----------------------------
-   🧩 Form elements
----------------------------- */
+/* =============================================================
+   ✏️ Generic Form Elements Styling
+============================================================= */
 .input {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 1rem;
     border: 1px solid var(--color-border);
     border-radius: 8px;
-    padding: 10px 14px;
-    width: 100%;
-    transition: border-color 0.3s;
     font-size: 0.95rem;
-    margin-bottom: 1rem;
+    transition: border-color 0.3s;
 }
 
 .input:focus {
@@ -84,33 +83,334 @@ body {
 }
 
 .btn-primary:hover {
-    background-color: #0051cc;
+    background-color: #0052cc;
 }
 
-/* ----------------------------
-   🔗 Utility links
----------------------------- */
+/* =============================================================
+   🔗 Generic Links
+============================================================= */
 .link-muted {
     font-size: 0.8rem;
-    color: #999999;
+    color: var(--color-muted);
     text-decoration: underline;
     margin-top: 10px;
     display: inline-block;
 }
 
-/* ----------------------------
-   🔻 Footer sticky
----------------------------- */
-/* ----------------------------
-   🔻 Footer fixed and centered
----------------------------- */
-.footer-fixed {
-    font-size: 0.8rem;
-    color: #888;
+/* =============================================================
+   🔻 Sticky Footer Styling
+============================================================= */
+.footer-fixed,
+.footer-dark {
     position: fixed;
     bottom: 10px;
     left: 0;
     right: 0;
     text-align: center;
+    font-size: 0.75rem;
+    color: var(--color-muted);
     z-index: 1000;
+}
+
+.footer-dark a {
+    color: var(--color-muted);
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+.footer-dark a:hover {
+    color: #ccc;
+}
+
+/* =============================================================
+   🌒 Dark Login Theme (Apple-Inspired)
+============================================================= */
+body.login-dark {
+    background-color: #121314;
+    color: #f5f5f5;
+}
+
+.login-dark-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.login-dark-card {
+    background-color: #1e1f20;
+    padding: 2.5rem;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+}
+
+.login-dark-icon {
+    margin-bottom: 1rem;
+}
+
+.login-dark-icon svg {
+    width: 42px;
+    height: 42px;
+    fill: var(--color-accent);
+}
+
+.login-dark-card h2 {
+    color: #f5f5f5;
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.login-dark-card label {
+    color: #d0d0d0;
+    font-size: 0.9rem;
+    text-align: left;
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.login-dark-input {
+    background-color: #3a3a3c;
+    border: none;
+    color: #fff;
+    font-size: 0.95rem;
+    padding: 12px 14px;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.login-dark-input:focus {
+    outline: none;
+    border: 1px solid var(--color-accent);
+    box-shadow: 0 0 0 2px #0066ff33;
+}
+
+.login-dark-button {
+    background-color: var(--color-accent);
+    border: none;
+    color: white;
+    padding: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+    width: 100%;
+    margin-top: 1rem;
+    cursor: pointer;
+}
+
+.login-dark-button:hover {
+    background-color: #0052cc;
+}
+
+.login-dark-remember {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.login-dark-links {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+}
+
+.login-dark-links a {
+    color: #bbb;
+    text-decoration: none;
+    display: block;
+    margin-top: 6px;
+}
+
+.login-dark-links a:hover {
+    color: #fff;
+}
+
+/* =============================================================
+   🖥️ Dashboard Base (Dark Theme)
+============================================================= */
+.dashboard-wrapper {
+    background-color: #121314;
+    min-height: 100vh;
+    padding: 0;
+    color: #f0f0f0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar-dark {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #1e1e1e;
+    border-bottom: 1px solid #333;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+}
+
+.navbar-left {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #f0f0f0;
+}
+
+.navbar-links a {
+    color: #bbb;
+    margin-left: 1.5rem;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.navbar-links a:hover {
+    color: var(--color-accent);
+}
+
+.dashboard-content {
+    max-width: 90%;
+    height: calc(100vh - 90px);
+    margin: 100px auto 40px auto;  /* margin adjusted below fixed navbar */
+    background-color: #1e1e1e;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+}
+
+.welcome-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.dashboard-section {
+    margin-top: 2rem;
+}
+
+.dashboard-section h2 {
+    font-size: 1.1rem;
+    color: #e0e0e0;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.3rem;
+}
+
+.dashboard-section ul {
+    list-style-type: none;
+    padding: 0;
+    line-height: 1.7;
+}
+
+.dashboard-section li {
+    font-size: 0.95rem;
+    color: #ccc;
+}
+
+.dashboard-section li a {
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.dashboard-section li a:hover {
+    text-decoration: underline;
+}
+
+/* =============================================================
+   👤 Navbar: User info section styled inline with nav links
+============================================================= */
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* 👤 User info group */
+.navbar-user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 2rem;
+    font-size: 0.95rem;
+    color: #bbb;
+}
+
+/* 👤 Avatar icon - round circle */
+.user-avatar {
+    background-color: #3a3a3c;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: #a0a0a0;
+}
+
+/* ✍️ Username styling */
+.user-name {
+    font-weight: 500;
+    color: #bbb;
+}
+
+/* 📅 Date styling */
+.current-date {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* | Pipe divider between nav and user block */
+.divider {
+    font-size: 1rem;
+    color: #555;
+    margin-right: 5px;
+}
+
+/* =============================================================
+   🧩 User Dropdown Styling
+============================================================= */
+.user-dropdown {
+    position: absolute;
+    top: 60px;
+    right: 2rem;
+    background-color: #2a2b2d;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    padding: 0.75rem 0;
+    width: 200px;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.user-dropdown a {
+    padding: 10px 16px;
+    text-decoration: none;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.user-dropdown a:hover {
+    background-color: #3a3a3c;
+    color: white;
+}
+
+/* Hide by default */
+.hidden {
+    display: none;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
