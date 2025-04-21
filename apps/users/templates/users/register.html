@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register | BAOBYTE{% endblock %}
+{% block body_class %}register-page{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/users/register.css' %}">
+<style>
+  .headline-color {
+    color: #FF8000; /* Reemplaza con el color deseado para el encabezado */
+  }
+
+  .paragraph-color {
+    color: #ADD8E6; /* Reemplaza con el color deseado para el párrafo */
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="vh-100 d-flex align-items-center justify-content-center">
+  <div class="container-fluid h-100">
+    <div class="row d-flex align-items-center justify-content-center h-100">
+
+      <div class="col-md-6 text-light d-none d-md-block register-info" style="text-align: center;">
+        <h1 class="display-4 fw-bold headline-color" style="color: #FF8000; font-size: 3.5rem;">The best offer<br><span class="highlight">for your business</span></h1>
+        <p class="text-muted paragraph-color" style="font-size: 1.5rem;">Join the BAOBYTE platform and take your projects<br>to the next level. We care about security,<br>style, and performance.</p>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card register-card shadow">
+          <div class="card-body p-4">
+            <h2 class="text-center mb-4">Create Your Account</h2>
+
+            <form method="post" action="{% url 'users:register' %}">
+              {% csrf_token %}
+
+              <div class="row mb-3">
+                <div class="col">
+                  <input type="text" name="first_name" placeholder="First name" class="form-control form-control-app">
+                </div>
+                <div class="col">
+                  <input type="text" name="last_name" placeholder="Last name" class="form-control form-control-app">
+                </div>
+              </div>
+
+              <input type="text" name="username" placeholder="Username" class="form-control form-control-app mb-3">
+              <input type="email" name="email" placeholder="Email address" class="form-control form-control-app mb-3">
+              <input type="password" name="password1" placeholder="Password" class="form-control form-control-app mb-3">
+              <input type="password" name="password2" placeholder="Confirm password" class="form-control form-control-app mb-3">
+
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="terms" id="terms" required>
+                <label class="form-check-label small " for="terms">I accept the Terms and Conditions</label>
+              </div>
+
+              <button type="submit" class="btn btn-primary-app w-100">Sign up</button>
+
+              <div class="text-center mt-3">
+                <a href="{% url 'users:login' %}" class="text-decoration-none text-info small">Already have an account? Log in</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

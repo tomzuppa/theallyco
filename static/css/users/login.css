@@ -1,0 +1,127 @@
+/* login.css — BAOBYTE Login Page Styling */
+/* ---------------------------------------
+   🌐 Applies to: templates/users/login.html
+------------------------------------------ */
+
+/* 🌑 Set full height and light background */
+body {
+  background-color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 🧱 Container spacing */
+.container-fluid.h-custom {
+  height: calc(100vh - 50px);
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* 📸 Style for left image column - fills vertical space */
+.custom-img-container {
+  height: 100vh;                 /* Full viewport height */
+  display: flex;                 /* Flex for vertical centering */
+  justify-content: center;      /* Center horizontally */
+  align-items: center;          /* Center vertically */
+  background-color: #f8f9fa;    /* Optional: subtle background */
+  padding: 0;                   /* Remove padding if any */
+}
+
+.login-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;           /* Ensures image fills space without distortion */
+}
+
+/* 🧾 Login form adjustments */
+.login-form {
+  padding: 2rem;
+}
+
+/* 🔠 Input styles */
+.login-form input.form-control {
+  height: 48px;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+/* 📛 Label tweaks */
+.login-form label.form-label {
+  font-weight: 500;
+  color: #666;
+}
+
+/* 🧠 Divider line */
+.divider p {
+  margin: 0;
+  color: #888;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+
+/* 👇 Styles a minimal Google button (same width as the icon) */
+.btn-google-icon {
+  background-color: #ffffff;             /* Default background */
+  border: none;
+  padding: 0.5rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  margin: 0 auto;
+}
+
+/* 👆 Hover to match login button color */
+.btn-google-icon:hover {
+  background-color: #0066ff;             /* Match login blue */
+  cursor: pointer;
+}
+
+
+
+/* 🧠 Rounded form */
+.login-form .form-control {
+  border-radius: 8px;
+}
+
+/* 🔽 Form spacing */
+.login-form .form-outline {
+  margin-bottom: 1.25rem;
+}
+
+/* ✅ Checkbox alignment */
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* 🔵 Login button */
+.login-form .btn-primary {
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  width: 20%;
+  border-radius: 6px;
+}
+
+/* 📱 Footer style */
+footer.bg-primary {
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+/* 📱 Responsive image alignment */
+@media (max-width: 768px) {
+  .login-img {
+      margin-bottom: 2rem;
+  }
+}

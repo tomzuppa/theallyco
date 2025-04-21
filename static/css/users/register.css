@@ -1,0 +1,117 @@
+/* 🌙 General dark theme background */
+body.register-page {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+/* 📦 Register container card */
+.register-card {
+  background-color: #f0f0f0; /* Gris muy claro */
+  /* background-color: #ffffff; /* Blanco */
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+  max-width: 800px;
+  width: 100%;
+}
+
+/* 🖊️ Form input styles */
+.form-control-app { /* Renamed for clarity and consistency */
+  background-color: white;
+  border: 1px solid #F8FAFC;
+  color: #333;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  width: 100%;
+}
+
+/* 🎯 Label for inputs */
+.register-label {
+  margin-bottom: 0.5rem;
+  color: #ccc;
+  font-weight: 500;
+}
+
+/* ✅ Checkbox styling */
+.form-check-input:checked {
+  background-color: #0066ff;
+  border-color: #0066ff;
+}
+
+/* ✅ Accept terms and conditions */
+.form-check-label {
+  color: #9AA6B2;  
+}
+
+/* 🔵 Blue button for Register */
+.btn-primary-app { /* Renamed for consistency */
+  background-color: #0066ff;
+  border: none;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  width: 100%;
+}
+
+.btn-primary-app:hover {
+  background-color: #0056d6;
+}
+
+/* 📝 Text block on the left */
+.register-info h1 { /* Targeting the h1 within the info block */
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white; /* Default color, will be overridden by .headline-color */
+}
+
+.headline-color {
+  color: #FF8000; /* Reemplaza con el color deseado para el encabezado */
+}
+
+.register-info span.highlight { /* Targeting the span with class highlight within the info block */
+  color: #0066ff; /* Example highlight color */
+}
+
+.register-info p { /* Targeting the p within the info block */
+  color: #aaa; /* Default color, will be overridden by .paragraph-color */
+  margin-top: 1rem;
+}
+
+.paragraph-color {
+  color: #ADD8E6; /* Reemplaza con el color deseado para el párrafo */
+}
+
+/* 🧱 Card and responsive design */
+.register-card .card {
+  background-color: #2c2c2e;
+  border: none;
+  border-radius: 12px;
+}
+
+/*Create your account title */
+.register-card .card-body h2 {
+  color: #9AA6B2; /* 
+  padding: 2rem;
+  
+}
+
+/* 📱 Responsive tweaks */
+@media (max-width: 768px) {
+  .register-info {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+}
+
+/* 📌 Footer style (fixed and orange bar) */
+footer.app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: orange;
+  color: white;
+  padding: 0.5rem;
+  text-align: center;
+  z-index: 9999;
+}

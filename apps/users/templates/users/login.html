@@ -1,54 +1,93 @@
-{% extends "base.html" %}
-{% load widget_tweaks %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Login - Secure Access{% endblock %}
+{% block title %}Login - BAOBYTE{% endblock %}
 
-{% block body_class %}login-dark{% endblock %}
-{% block content %}
-<div class="login-dark-container">
-    <div class="login-dark-card">
-
-        <!-- Top Icon -->
-        <div class="login-dark-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0z"/>
-                <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
-            </svg>
-        </div>
-
-        <h2>Sign in to Your Account</h2>
-
-        <form method="POST" novalidate>
-            {% csrf_token %}
-            <div>
-                <label for="username">Username</label>
-                {{ form.username|add_class:"login-dark-input" }}
-            </div>
-            <div>
-                <label for="password">Password</label>
-                {{ form.password|add_class:"login-dark-input" }}
-            </div>
-
-            <div class="login-dark-remember">
-                <input type="checkbox" id="keep-signed" name="keep-signed">
-                <label for="keep-signed">Keep me signed in</label>
-            </div>
-
-            <button type="submit" class="login-dark-button">Log In</button>
-        </form>
-
-        <div class="login-dark-links">
-            <a href="#">Forgot your password?</a>
-            <a href="#">Create Account</a>
-        </div>
-
-    </div>
-</div>
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/users/login.css' %}">
 {% endblock %}
 
-{% block footer %}
-<div class="footer-dark">
-    <a href="#">Privacy Policy</a>
-    <span>© {{ current_year }} — All Rights Reserved</span>
-</div>
+{% block content %}
+<section class="vh-100 d-flex align-items-center justify-content-center">
+  <div class="container-fluid h-100">
+    <div class="row d-flex align-items-center justify-content-center h-100">
+
+      <!-- 🖼️ Image Column -->
+      <div class="col-md-6 d-none d-md-block text-center custom-img-container">
+        <img src="{% static 'img/login_page_img.jpg' %}" class="img-fluid login-image" alt="Login image">
+      </div>
+
+      <!-- 🔐 Login Form Column -->
+      <div class="col-md-6">
+        <form method="post" action="{% url 'users:login' %}" class="login-form">
+          {% csrf_token %}
+        
+            <!-- Horizontal line with text -->
+            <div style="display: flex; align-items: center; margin-bottom: 50px;">
+              <div style="flex-grow: 1; border-top: 1px solid #ccc;"></div>
+              <span style="padding: 0 10px; font-size: 1.2em; color: #89A8B2"><strong>Sign in with your account</strong></span>
+              <div style="flex-grow: 1; border-top: 1px solid #ccc;"></div>
+            </div>
+
+          <!-- 📩 Email input -->
+          <div class="form-outline mb-3">
+            <input type="email" name="username" class="form-control form-control-lg login-input" placeholder="Email address" required>
+          </div>
+
+          <!-- 🔒 Password input -->
+          <div class="form-outline mb-3 position-relative">
+            <input type="password" name="password" id="id_password" class="form-control form-control-lg login-input" placeholder="Password" required>
+            <span toggle="#id_password" class="field-icon toggle-password">
+              <i class="fas fa-eye" id="togglePassword"></i>
+            </span>
+          </div>
+
+          <!-- 🔘 Remember Me and Forgot Password -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="remember" id="remember" />
+              <label class="form-check-label" for="remember">Keep me signed in</label>
+            </div>
+            <a href="#" class="text-body small">Forgot password?</a>
+          </div>
+
+          <!-- 🚪 Login Button -->
+          <div class="text-left mb-3">
+            <button type="submit" class="btn btn-primary btn-lg btn-login w-20">Login</button>
+          </div>
+
+          <!-- 📝 Register -->
+          <div class="text-left">
+            <p class="small" style="margin-bottom: 40px;" style="color: #89A8B2;">Don't have an account?  <a href="{% url 'users:register' %}" class="link-danger"> Register </a></p>
+          </div>
+          
+            <!-- Horizontal line with text -->
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+              <div style="flex-grow: 1; border-top: 1px solid #ccc;"></div>
+              <span style="padding: 0 10px; font-size: .8 em; color: #89A8B2">Sign in with Google</span>
+              <div style="flex-grow: 1; border-top: 1px solid #ccc;"></div>
+            </div>
+                    
+      <!-- 🌐 Google Login Button -->
+      <div class="text-center mb-4">
+        <p class="section-title"> </p>
+        <a href="#" class="btn btn-google-icon" aria-label="Login with Google">
+          <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" width="20">
+        </a>        
+      </div>
+
+
+          
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+      
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/users_login/login.js' %}"></script>
 {% endblock %}

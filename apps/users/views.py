@@ -4,6 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.contrib.auth import logout
 from datetime import datetime
+from django.views.generic import FormView
+from django.urls import reverse_lazy
+from .forms import RegisterForm
+from django.contrib import messages
+
 
 # ----------------------------
 # Login process (app users)
@@ -32,3 +37,26 @@ def dashboard_base(request):
     context = {'current_date': datetime.now().strftime("%b %d, %Y"),  # Example: Apr 18, 2025
     }
     return render(request, 'dashboardb.html', context)
+
+
+# 🧭 Class-based view for user registration
+class RegisterView(FormView):
+    template_name = "users/register.html"           # 📄 Template path
+    form_class = RegisterForm                       # 📋 Form class to render and validate
+    success_url = reverse_lazy('users:login')       # ✅ Redirect after successful registration
+
+    def form_valid(self, form):
+        """
+        If the form is valid, save the new user.
+        You can also handle additional profile data here in the future.
+        """
+        form.save()
+        messages.success(self.request, "Your account has been created successfully!")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        """
+        If the form is invalid, show error messages.
+        """
+        messages.error(self.request, "Please correct the errors below.")
+        return super().form_invalid(form)

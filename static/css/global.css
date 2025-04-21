@@ -1,0 +1,16 @@
+/* 🍊 Full-width fixed footer inside an orange banner */
+.footer-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ff6600; /* Bright orange */
+    z-index: 999;
+  }
+  
+  .footer-content {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    color: #ffffff;
+  }
+  

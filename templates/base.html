@@ -2,33 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Secure Login{% endblock %}</title>
+    <title>{% block title %}BAOBYTE - Login{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <!-- Bootstrap 5 -->
     {% load static %}
-
-    {% comment %} <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> {% endcomment %}
-
-    <!-- Custom CSS (Optional) -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    {% block extra_head %}{% endblock %}
 </head>
-<body class="{% block body_class %}{% endblock %} text-center">
+<body>
+  {% block content %}{% endblock %}
 
-    <main class="container mt-5">
-        {% block content %}
-        {% endblock %}
-    </main>
+  <!-- 🔒 Fixed footer -->
+  {% block footer %}
+  <footer class="footer-banner">
+    <div class="footer-content text-center text-white small">
+      © {{ current_year }} — Powered by Django, secured with ♥
+    </div>
+  </footer>
+  {% endblock %}
+  
 
-    <footer class="footer-fixed">
-        © {{ current_year }} — Powered by Django, secured with ♥
-    </footer>
-    
-    <!-- Bootstrap JS (optional) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    {% comment %} user-dropdown.js (static) {% endcomment %}
-    <script src="{% static 'js/user-dropdown.js' %}"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'js/users_login/login.js' %}"></script>
+  {% block extra_js %}{% endblock %}
 </body>
 </html>
