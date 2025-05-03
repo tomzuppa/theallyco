@@ -6,7 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.conf import settings  # ✅ Access to environment-based settings
 import requests
 from django.conf import settings
-
+from project_root import messages as sysmsg  # import messages (central messages platform)
 
 User = get_user_model()  # ✅ This ensures you're using CustomUser correctly
 
@@ -143,7 +143,7 @@ class RegisterForm(forms.ModelForm):
 
         recaptcha_response = self.request.POST.get("g-recaptcha-response")
         if not recaptcha_response:
-            self.add_error(None, "Please complete the reCAPTCHA.")
+            self.add_error(None, sysmsg.MESSAGES["CAPTCHA_REQUIRED"])
             return cleaned_data
 
         # ✅ Validation vs  Google
@@ -155,7 +155,7 @@ class RegisterForm(forms.ModelForm):
         result = response.json()
 
         if not result.get("success"):
-            raise forms.ValidationError("reCAPTCHA validation failed. Please try again.")
+            raise forms.ValidationError(sysmsg.MESSAGES["CAPTCHA_INVALID"])
 
         return cleaned_data        
 
@@ -192,7 +192,7 @@ class EmailLoginForm(AuthenticationForm):
 
             # 🚫 If not completed, show user-friendly error
             if not recaptcha_response:
-                self.add_error(None, "Please complete the reCAPTCHA below.")
+                self.add_error(None, sysmsg.MESSAGES["CAPTCHA_REQUIRED"])
                 return super().clean()
 
             # ✅ Validate the token with Google's API
@@ -204,7 +204,7 @@ class EmailLoginForm(AuthenticationForm):
             result = response.json()
 
             if not result.get("success"):
-                self.add_error(None, "reCAPTCHA validation failed. Please try again.")
+                self.add_error(None, sysmsg.MESSAGES["CAPTCHA_INVALID"])
                 return super().clean()
 
         # 🔐 Credentials check (email/password)

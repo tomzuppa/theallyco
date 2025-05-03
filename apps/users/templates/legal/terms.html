@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Terms and Conditions{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-light">
+  <h1 class="mb-4">Terms and Conditions</h1>
+  <p><strong>1. Acceptance of Terms</strong><br>
+  By creating an account or using our services, you accept and agree to be bound by these Terms and our Privacy Policy.</p>
+
+  <p><strong>2. Use of Services</strong><br>
+  You agree to use the platform solely for lawful purposes...</p>
+
+  <!-- Add more sections as needed -->
+
+  <a href="{% url 'users:register' %}" class="btn btn-outline-light mt-4">Back to Register</a>
+</div>
+{% endblock %}

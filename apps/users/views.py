@@ -145,7 +145,7 @@ class RegisterView(FormView):
         """
         If the form is invalid, show error messages.
         """
-        messages.error(self.request, sysmsg.MESSAGES["GENERIC_ERROR"])  # 👈 Message of error
+        #messages.error(self.request, sysmsg.MESSAGES["GENERIC_ERROR"])  # 👈 Message of error
         return super().form_invalid(form)
     
     # Google captcha
@@ -153,3 +153,9 @@ class RegisterView(FormView):
         kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request  # ✅ Here the info is sent
         return kwargs        
+
+"""
+Terms and Conditions for Registration Page
+"""
+def terms(request):
+    return render(request, 'legal/terms.html')

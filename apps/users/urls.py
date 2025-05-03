@@ -13,4 +13,5 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),  # LogOut
     path('register/', RegisterView.as_view(), name='register'),  #New User Register
     path('dashboard/', views.dashboard_base, name='dashboard'), #main dashboard
+     path('terms/', views.terms, name='terms'), #Terms and conditions (for registration)
 ]

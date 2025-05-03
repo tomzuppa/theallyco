@@ -28,4 +28,9 @@ MESSAGES = {
     # System
     "GENERIC_ERROR": "An unexpected error occurred. Please try again.",
     "ACCESS_DENIED": "You do not have permission to access this page.",
+
+    # Captcha
+    "CAPTCHA_REQUIRED": "Please complete the reCAPTCHA.",
+    "CAPTCHA_INVALID": "reCAPTCHA validation failed. Please try again.",
+
 }
