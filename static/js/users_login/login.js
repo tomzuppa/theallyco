@@ -1,17 +1,29 @@
-// login.js — Placehol// login.js — Toggle Password Visibility
-// Affects: <span class="toggle-password"> in login.html, line ~44
+// 👁️ Toggle password visibility while pressing the eye icon
+document.addEventListener('DOMContentLoaded', function() {
+  const passwordInput = document.getElementById('id_password');
+  const togglePassword = document.getElementById('togglePassword');
 
-function togglePasswordVisibility() {
-    const passwordInput = document.getElementById('id_password');
-    const toggleIcon = document.querySelector('.toggle-password');
-  
-    if (!passwordInput || !toggleIcon) return;
-  
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-  
-    // Optional: Toggle eye icon or style (if you want dynamic icon)
-    toggleIcon.textContent = type === 'password' ? '👁️' : '🙈';
+  if (passwordInput && togglePassword) {
+    togglePassword.addEventListener('mousedown', function() {
+      passwordInput.type = 'text'; // 👁️ Show password while pressing
+    });
+
+    togglePassword.addEventListener('mouseup', function() {
+      passwordInput.type = 'password'; // 🔒 Hide password on release
+    });
+
+    togglePassword.addEventListener('mouseleave', function() {
+      passwordInput.type = 'password'; // 🔒 Hide password if mouse leaves the icon
+    });
+
+    // 📱 Touch support (for mobile devices)
+    togglePassword.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      passwordInput.type = 'text';
+    });
+
+    togglePassword.addEventListener('touchend', function() {
+      passwordInput.type = 'password';
+    });
   }
-  der for future login interactions
-// Affects: login.html
+});

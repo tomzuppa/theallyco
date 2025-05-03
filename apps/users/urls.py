@@ -11,5 +11,6 @@ urlpatterns = [
     # ✅ URL PATTERNS
     path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', views.logout_view, name='logout'),  # LogOut
-    path('register/', RegisterView.as_view(), name='register') #New User Register
+    path('register/', RegisterView.as_view(), name='register'),  #New User Register
+    path('dashboard/', views.dashboard_base, name='dashboard'), #main dashboard
 ]

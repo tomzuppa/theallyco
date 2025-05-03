@@ -1,0 +1,38 @@
+<!-- dashboardb.html: Main template for the dashboard -->
+{% extends 'base.html' %}
+
+{% load static %}
+
+<!-- Page Title -->
+{% block title %}Dashboard | BAOBYTE{% endblock %}
+
+<!-- Link Dashboard-specific CSS -->
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/dashboardb/dashboardb.css' %}">
+{% endblock %}
+
+<!-- Body content of the dashboard -->
+{% block content %}
+
+<div class="dashboard-container">
+
+    <!-- Include Header -->
+    {% include 'dashboardb/header.html' %}
+    
+    <div class="dashboard-main-content">
+    
+        <!-- Include Sidebar -->
+        {% include 'dashboardb/sidebar.html' %}
+        
+        <!-- Dashboard content area -->
+        <main class="content-area">
+            <h1>Welcome back, {{ username }}!</h1>
+            <section class="content-section">
+                <!-- Add dashboard-specific widgets or content here -->
+                <p>This is your dashboard. Start customizing!</p>
+            </section>
+        </main>
+        
+    </div>
+</div>
+{% endblock %}

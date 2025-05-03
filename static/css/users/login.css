@@ -1,127 +1,203 @@
-/* login.css — BAOBYTE Login Page Styling */
-/* ---------------------------------------
-   🌐 Applies to: templates/users/login.html
------------------------------------------- */
+/* -------------------------------------------------
+🌐  Styles for the Login Page
+------------------------------------------------- */
 
-/* 🌑 Set full height and light background */
-body {
-  background-color: #ffffff;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* 🧱 Container spacing */
-.container-fluid.h-custom {
-  height: calc(100vh - 50px);
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-}
-
-/* 📸 Style for left image column - fills vertical space */
-.custom-img-container {
-  height: 100vh;                 /* Full viewport height */
-  display: flex;                 /* Flex for vertical centering */
-  justify-content: center;      /* Center horizontally */
-  align-items: center;          /* Center vertically */
-  background-color: #f8f9fa;    /* Optional: subtle background */
-  padding: 0;                   /* Remove padding if any */
-}
-
-.login-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;           /* Ensures image fills space without distortion */
-}
-
-/* 🧾 Login form adjustments */
-.login-form {
-  padding: 2rem;
-}
-
-/* 🔠 Input styles */
-.login-form input.form-control {
-  height: 48px;
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
-}
-
-/* 📛 Label tweaks */
-.login-form label.form-label {
-  font-weight: 500;
-  color: #666;
-}
-
-/* 🧠 Divider line */
-.divider p {
-  margin: 0;
-  color: #888;
-  font-weight: bold;
-  font-size: 0.9rem;
-}
-
-
-/* 👇 Styles a minimal Google button (same width as the icon) */
-.btn-google-icon {
-  background-color: #ffffff;             /* Default background */
-  border: none;
-  padding: 0.5rem;
-  width: 42px;
-  height: 42px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s ease;
-  margin: 0 auto;
-}
-
-/* 👆 Hover to match login button color */
-.btn-google-icon:hover {
-  background-color: #0066ff;             /* Match login blue */
-  cursor: pointer;
-}
-
-
-
-/* 🧠 Rounded form */
-.login-form .form-control {
-  border-radius: 8px;
-}
-
-/* 🔽 Form spacing */
-.login-form .form-outline {
-  margin-bottom: 1.25rem;
-}
-
-/* ✅ Checkbox alignment */
-.form-check {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* 🔵 Login button */
-.login-form .btn-primary {
-  padding: 0.75rem;
-  font-size: 1rem;
-  font-weight: bold;
-  width: 20%;
-  border-radius: 6px;
-}
-
-/* 📱 Footer style */
-footer.bg-primary {
-  color: white;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.875rem;
-}
-
-/* 📱 Responsive image alignment */
-@media (max-width: 768px) {
-  .login-img {
-      margin-bottom: 2rem;
+/* Affects: <section class="login-section"> 
+   --> Sets full viewport height and background color */
+   .login-section {
+    min-height: 100vh;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-}
+  
+  /* Affects: <div class="login-container d-flex">
+     --> Divides the page into two parts: image and form */
+  .login-container {
+    width: 90%;
+    max-width: 1400px;
+    height: 80vh;
+    display: flex;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* -------------------------------------------------
+  🖼️ Left Side - Image
+  ------------------------------------------------- */
+  
+  /* Affects: <div class="login-image-container">
+     --> Defines the left side width (65%) */
+  .login-image-container {
+    flex: 0 0 65%;
+    background-color: #f0f2f5;
+    position: relative;
+  }
+  
+  /* Affects: <img class="login-image">
+     --> Makes the image cover the entire container */
+  .login-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* -------------------------------------------------
+  📝 Right Side - Form
+  ------------------------------------------------- */
+  
+  /* Affects: <div class="login-form-container">
+     --> Defines the right side width (35%) and centers content */
+  .login-form-container {
+    flex: 0 0 35%;
+    background-color: #ffffff;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Affects: <form class="login-form">
+     --> Form dimensions and internal layout */
+  .login-form {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  /* Affects: <h2 class="form-title">
+     --> Login title inside the form */
+  .form-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #0066ff;
+    text-align: center;
+  }
+  
+  /* Affects: <div class="form-group"> inside the form
+     --> Styles for input containers */
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Affects: <input type="email"> and <input type="password">
+     --> Style inputs inside the form */
+  .form-control {
+    width: 100%;
+    height: 48px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  /* Affects: <span id="togglePassword" class="field-icon toggle-password">
+     --> Eye icon for password toggle */
+  .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #999;
+    cursor: pointer;
+  }
+  
+  .toggle-password:hover {
+    color: #666;
+  }
+  
+  /* Affects: <div class="form-options">
+     --> Container for "Keep me signed in" + "Forgot password" */
+  .form-options {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+  
+  /* Affects: <input type="checkbox" class="form-check-input">
+     --> Checkbox alignment */
+  .form-check-input {
+    margin-top: 0.3rem;
+  }
+  
+  /* Affects: <button type="submit" class="btn btn-primary">
+     --> Main login button */
+  .btn-primary {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    background-color: #0066ff;
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0052cc;
+  }
+  
+  /* Affects: <a class="small-link"> (Forgot password link)
+     --> Styling small text links */
+  .small-link {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  
+  .small-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Affects: <div class="text-center mt-3">
+     --> "Don't have an account? Register" section */
+  .small-text {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  /* Affects: <a class="link-primary"> (Register link)
+     --> Styling for Register link */
+  .link-primary {
+    color: #ff6600;
+    font-weight: bold;
+    margin-left: 5px;
+  }
+  
+  .link-primary:hover {
+    color: #e65c00;
+    text-decoration: underline;
+  }
+  
+  /* -------------------------------------------------
+  📱 Responsive Design
+  ------------------------------------------------- */
+  
+  /* On screens smaller than 768px
+     --> Stack image and form vertically */
+  @media (max-width: 768px) {
+  
+    /* Affects: .login-container (main container) */
+    .login-container {
+      flex-direction: column;
+      height: auto;
+      box-shadow: none;
+      border-radius: 0;
+    }
+  
+    /* Affects: .login-image-container (image section) */
+    .login-image-container {
+      flex: 0 0 auto;
+      height: 200px;
+    }
+  
+    /* Affects: .login-form-container (form section) */
+    .login-form-container {
+      flex: 0 0 auto;
+      width: 100%;
+      padding: 2rem 1.5rem;
+    }
+  
+  }
+  

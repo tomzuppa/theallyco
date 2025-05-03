@@ -1,0 +1,22 @@
+<!-- sidebar.html: Dashboard sidebar component -->
+<nav class="dashboard-sidebar">
+    <ul class="sidebar-nav">
+        <!-- Dashboard Link -->
+        <li>
+            <a href="{% url 'users:dashboard' %}">
+                Dashboard Home
+            </a>
+        </li>
+
+        <!-- Placeholder links for future navigation items -->
+        <li>
+            <a href="#">Analytics</a>
+        </li>
+        <li>
+            <a href="#">Settings</a>
+        </li>
+        <li>
+            <a href="{% url 'users:logout' %}">Logout</a>
+        </li>
+    </ul>
+</nav>

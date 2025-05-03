@@ -7,6 +7,7 @@ Do not include environment-specific values here (e.g., DEBUG, DB credentials).
 
 from pathlib import Path
 from decouple import config, Csv  # Load .env variables
+from django.contrib.messages import constants as messages  # Import Django built-in message constants
 
 # Base directory of the project
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -50,6 +51,12 @@ MIDDLEWARE = [
 # Root URL configuration
 ROOT_URLCONF = 'project_root.urls'
 
+# Login no longer uses username, now handled via email through custom backend
+AUTHENTICATION_BACKENDS = [
+    'apps.users.authentication.EmailBackend',  # (login with email)
+]
+
+
 # Template engine settings
 TEMPLATES = [
     {
@@ -83,57 +90,112 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Localization settings
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'America/Mexico_City'
-USE_I18N = True
-USE_TZ = True
 
-# Static file settings (CSS, JS, images)
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Media files (user uploads)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+"""
+Django base settings configuration file.
 
-# Primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+This file includes all core settings such as localization, static and media files,
+custom user models, authentication redirects, and trusted origins.
+"""
 
-# 🔐 Custom user model configuration
-# This tells Django to use our CustomUser model instead of the default User
+# File: settings.py
+# Purpose: Map Django message types to Bootstrap alert classes for consistent visual formatting across the platform.
+
+# 🔥 Custom mapping for Django messages to Bootstrap classes
+MESSAGE_TAGS = {
+    messages.DEBUG: 'secondary',  # Debug messages will appear as Bootstrap 'secondary' (gray)
+    messages.INFO: 'info',         # Info messages will appear as Bootstrap 'info' (blue)
+    messages.SUCCESS: 'success',   # Success messages will appear as Bootstrap 'success' (green)
+    messages.WARNING: 'warning',   # Warning messages will appear as Bootstrap 'warning' (yellow/orange)
+    messages.ERROR: 'danger',      # Error messages will appear as Bootstrap 'danger' (red)
+}
+
+# 📋 This setting affects: 
+# - Display of messages in templates (like base.html)
+# - Visual color (class) assigned to each Django message
+# - Ensures consistency between Django backend logic and Bootstrap frontend design
+
+
+
+# -----------------------------------
+# 🌐 Localization & Internationalization
+# -----------------------------------
+LANGUAGE_CODE = 'en-us'  # Default language code
+TIME_ZONE = 'America/Mexico_City'  # Time zone for timestamps
+USE_I18N = True  # Internationalization support
+USE_TZ = True  # Timezone-aware datetime objects
+
+# -----------------------------------
+# 📁 Static Files (CSS, JS, Images)
+# -----------------------------------
+STATIC_URL = '/static/'  # URL path for static files
+STATICFILES_DIRS = [BASE_DIR / 'static']  # Additional static files directories
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Collected static files location
+
+# -----------------------------------
+# 📂 Media Files (User Uploads)
+# -----------------------------------
+MEDIA_URL = '/media/'  # URL path for user-uploaded media files
+MEDIA_ROOT = BASE_DIR / 'media'  # Physical location for storing uploaded files
+
+# -----------------------------------
+# 🔑 Custom User Model Configuration
+# -----------------------------------
+# Using a custom user model instead of Django's built-in model
 AUTH_USER_MODEL = 'users.CustomUser'
 
-# Path to the root URL configuration file (urls.py)
-# This tells Django which module contains the main URL declarations
+# -----------------------------------
+# 🌐 Root URL Configuration
+# -----------------------------------
+# Specifies the Python module containing the URL declarations
 ROOT_URLCONF = 'project_root.urls'
 
-# 🔐 Default path to redirect after successful login
-LOGIN_REDIRECT_URL = '/'
-
-# 🔐 Default login view for @login_required decorators
-LOGIN_URL = 'users:login'
-
-LOGOUT_REDIRECT_URL = 'users:login'  # 🔄 Redirect to login after logout
-
-
-# ----------------------------------------
-# 🔐 Authentication Redirection Settings
-# ----------------------------------------
-
-# The URL where requests are redirected for login.
-# This is used when the @login_required decorator is triggered
+# -----------------------------------
+# 🛡️ Authentication and Redirection URLs
+# -----------------------------------
+# URL to redirect to for login if the user is not authenticated
 LOGIN_URL = '/users/login/'
 
-# After a successful login, the user will be redirected to this URL.
-# Typically used for dashboard or landing page after authentication
-LOGIN_REDIRECT_URL = '/dashboard/'
+# URL to redirect users after successful login
+LOGIN_REDIRECT_URL = '/users/dashboard/'  # 👈 Updated to modular path
 
-# After logout, redirect the user to the login page
+# URL to redirect users after logout
 LOGOUT_REDIRECT_URL = '/users/login/'
 
-# Server addres for GCP development environment (replace in production)
+
+# -----------------------------------
+# 🔒 Session Management Settings
+# -----------------------------------
+
+# Default session duration (only used if not overridden manually)
+SESSION_COOKIE_AGE = 60 * 60 * 24  # 1 day (in seconds)
+
+# Do not expire session on browser close by default (we control it manually in views)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+# 🔥 Refresh session expiry on every request
+# This allows implementing "auto-logout by inactivity" behavior
+SESSION_SAVE_EVERY_REQUEST = True
+
+
+# -----------------------------------
+# 🔑 Security and Trusted Origins
+# -----------------------------------
+# Trusted origins for CSRF protection (update for production)
 CSRF_TRUSTED_ORIGINS = [
     'https://8000-cs-61983882132-default.cs-us-central1-pits.cloudshell.dev',
+    'https://8080-cs-61983882132-default.cs-us-central1-pits.cloudshell.dev',
 ]
+
+# -----------------------------------
+# ⚙️ Primary Key Field Type
+# -----------------------------------
+# Default primary key type for Django models
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# -----------------------------------
+# 🔐 reCAPTCHA keys loaded from .env file
+# -----------------------------------
+RECAPTCHA_SITE_KEY = config("RECAPTCHA_SITE_KEY")
+RECAPTCHA_SECRET_KEY = config("RECAPTCHA_SECRET_KEY")

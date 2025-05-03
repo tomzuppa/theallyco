@@ -6,17 +6,16 @@ body.register-page {
 
 /* 📦 Register container card */
 .register-card {
-  background-color: #f0f0f0; /* Gris muy claro */
-  /* background-color: #ffffff; /* Blanco */
+  background-color: #f0f0f0; /* Very light gray */
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Subtle shadow */
   max-width: 800px;
   width: 100%;
 }
 
 /* 🖊️ Form input styles */
-.form-control-app { /* Renamed for clarity and consistency */
+.form-control-app {
   background-color: white;
   border: 1px solid #F8FAFC;
   color: #333;
@@ -40,45 +39,49 @@ body.register-page {
 
 /* ✅ Accept terms and conditions */
 .form-check-label {
-  color: #9AA6B2;  
+  color: #9AA6B2;
 }
 
 /* 🔵 Blue button for Register */
-.btn-primary-app { /* Renamed for consistency */
-  background-color: #0066ff;
+.btn-primary-app {
+  background-color: #0066ff; /* Nice blue */
   border: none;
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
   width: 100%;
+  transition: background-color 0.3s ease; /* Smooth transition */
 }
 
 .btn-primary-app:hover {
-  background-color: #0056d6;
+  background-color: #0047b3; /* Darker blue on hover */
+  color: white; /* Keep text white on hover */
 }
 
-/* 📝 Text block on the left */
-.register-info h1 { /* Targeting the h1 within the info block */
-  font-size: 2.5rem;
+/* 📝 Text block on the left (Marketing block) */
+.headline-main {
+  font-size: 5rem; /* Big orange title */
+  color: #FF8000;
   font-weight: bold;
-  color: white; /* Default color, will be overridden by .headline-color */
+  display: inline-block;
+  animation: fadeInUp 1s ease forwards;
 }
 
-.headline-color {
-  color: #FF8000; /* Reemplaza con el color deseado para el encabezado */
+.headline-sub {
+  font-size: 3rem; /* Smaller blue subtitle */
+  color: #0066ff;
+  font-weight: bold;
+  display: inline-block;
+  animation: fadeInUp 1.5s ease forwards; /* A little delay for cooler effect */
 }
 
-.register-info span.highlight { /* Targeting the span with class highlight within the info block */
-  color: #0066ff; /* Example highlight color */
-}
-
-.register-info p { /* Targeting the p within the info block */
-  color: #aaa; /* Default color, will be overridden by .paragraph-color */
+.register-info p {
+  color: #aaa;
   margin-top: 1rem;
 }
 
 .paragraph-color {
-  color: #ADD8E6; /* Reemplaza con el color deseado para el párrafo */
+  color: #ADD8E6; /* Light blue paragraph text */
 }
 
 /* 🧱 Card and responsive design */
@@ -88,11 +91,9 @@ body.register-page {
   border-radius: 12px;
 }
 
-/*Create your account title */
+/* 📝 Create your account title inside the card */
 .register-card .card-body h2 {
-  color: #9AA6B2; /* 
-  padding: 2rem;
-  
+  color: #9AA6B2;
 }
 
 /* 📱 Responsive tweaks */
@@ -114,4 +115,16 @@ footer.app-footer {
   padding: 0.5rem;
   text-align: center;
   z-index: 9999;
+}
+
+/* 🌀 Fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
