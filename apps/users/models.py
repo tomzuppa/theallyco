@@ -33,3 +33,20 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+
+"""-----------------------------------------------------------------------
+ENABLE O DISABLE GOOGLE LOGIN BUTTON IN THE LOGIN PAGE FROM ADMIN PANEL
+-------------------------------------------------------------------------"""
+
+class AuthConfig(models.Model):
+    """
+    🎛️ Centralized authentication configuration.
+    This model allows enabling/disabling Google login from the admin panel.
+    """
+    enable_google_login = models.BooleanField(default=False, help_text="Enable login with Google")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "Authentication Settings"

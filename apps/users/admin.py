@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
-from .models import CustomUser
+from .models import CustomUser, AuthConfig
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
@@ -52,3 +52,10 @@ class CustomUserAdmin(UserAdmin):
 
     # 🔡 Default sorting of the user list
     ordering = ('username',)
+
+
+
+"""-----------------------------------------------------------------------
+ENABLE O DISABLE GOOGLE LOGIN BUTTON IN THE LOGIN PAGE FROM ADMIN PANEL
+-------------------------------------------------------------------------"""
+admin.site.register(AuthConfig)

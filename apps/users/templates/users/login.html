@@ -75,6 +75,18 @@
           <a href="{% url 'users:register' %}" class="link-primary">Register</a>
         </div>
 
+        
+        <!-- 🌐 Google Login Button -->
+        {% if enable_google_login %}
+        <div class="d-grid gap-2 mt-3">
+          <a href="{% url 'users:google_login' %}" class="btn btn-outline-info">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" width="20" class="me-2">
+            Login with Google
+          </a>
+        </div>
+      {% endif %}
+
+
       </form>
       <!-- End of Login Form -->
 
