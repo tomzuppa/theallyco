@@ -1,8 +1,18 @@
-# Inherit base dependencies
+# --------------------------------------------
+# DEVELOPMENT REQUIREMENTS
+# Last updated: 2025-05-08
+# --------------------------------------------
+
 -r base.txt
 
-# Interactive shell for easier testing and debugging
-ipython
-
-# Debug toolbar for viewing SQL queries, cache hits, template rendering time, etc.
-django-debug-toolbar
+autopep8==1.5.5                # Auto-formatting Python code (PEP8)
+flake8==3.8.4                  # Code style checker
+ipython==8.31.0                # Enhanced interactive Python shell
+isort==5.13.2                  # Sorts Python imports automatically
+pydocstyle==6.3.0              # Checks docstring conventions
+pyflakes==2.2.0                # Static code analysis
+pylint==3.3.3                  # Code linter and analyzer
+pre_commit==4.2.0              # Git hook manager for linting
+rope==1.13.0                   # Refactoring library
+virtualenv==20.28.1            # Manage isolated Python environments
+yapf==0.43.0                   # Google style code formatter

@@ -1,7 +1,47 @@
-# Core Django framework (LTS version)
-Django>=5.2,<5.3
+# --------------------------------------------
+# BASE REQUIREMENTS
+# Last updated: 2025-05-08
+# --------------------------------------------
 
-# Secure environment variable loading
-python-decouple
-
-django-widget-tweaks  # For form field customization in templates
+Deprecated==1.2.15              # Utility for marking deprecated features
+Django==5.2                     # Main Django framework
+Jinja2==3.1.5                   # Templating engine used by Django
+Markdown==3.7                   # Markdown support
+MarkupSafe==3.0.2              # Safe string handling for Jinja2
+Pillow==11.2.1                  # Image handling library (used in ImageFields)
+PyJWT==2.7.0                    # JSON Web Token authentication support
+PyYAML==6.0.2                   # YAML parsing, often used in configs
+attrs==24.3.0                   # Type validation for data classes
+blinker==1.9.0                  # Signal support, used by Flask and other libs
+cachetools==5.5.0              # In-memory caching utilities
+certifi==2024.12.14            # SSL certificates for secure HTTP
+cffi==1.17.1                    # C Foreign Function Interface
+charset-normalizer==3.4.1      # Encoding detection for HTTP responses
+click==8.1.8                    # Command-line interface helper
+crispy-bootstrap5==2024.10     # Bootstrap 5 support for django-crispy-forms
+cryptography==44.0.0           # Essential for secure operations (tokens, etc.)
+defusedxml==0.7.1              # Safe parsing of XML
+dj-database-url==2.3.0         # Parses DATABASE_URL to Django DB settings
+django-allauth==65.7.0         # User registration & authentication system
+django-auto-logout==0.5.1      # Auto logout inactive sessions
+django-axes==7.0.2             # Brute-force login prevention
+django-crispy-forms==2.3       # Form rendering utilities
+django-environ==0.12.0         # Environment variable management
+django-extensions==3.2.3       # Useful Django developer tools
+django-formtools==2.5.1        # Multi-step form support
+django-otp==1.5.4              # One-time password support (2FA)
+django-phonenumber-field==8.0.0 # Validates and formats phone numbers
+django-recaptcha==4.0.0        # Google ReCAPTCHA integration
+django-two-factor-auth==1.17.0 # 2FA integration using django-otp
+django-widget-tweaks==1.5.0    # Custom widget rendering in templates
+dnspython==2.7.0               # DNS toolkit for Python
+idna==3.10                     # Internationalized domain names
+phonenumbers==8.13.53          # Phone number parsing library
+psycopg2-binary==2.9.10        # PostgreSQL adapter for Django
+python-dateutil==2.9.0.post0   # Enhanced datetime parsing
+python-decouple==3.8           # Isolates config from code using .env
+python-dotenv==1.0.1           # Loads environment variables from .env
+pytz==2025.1                   # Timezone definitions for datetime
+requests==2.32.3               # HTTP library for external APIs
+sqlparse==0.5.3                # SQL parser (used by Django internally)
+urllib3==2.3.0                 # HTTP client, required by requests
