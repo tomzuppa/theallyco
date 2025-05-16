@@ -1,40 +1,71 @@
-from django.shortcuts import render
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
-from django.contrib.auth import logout
-from datetime import datetime
-from django.views.generic import FormView
-from django.urls import reverse_lazy
-from .forms import RegisterForm
-from django.contrib import messages
-from .forms import EmailLoginForm # ✅ authentication.py
-from project_root import messages as sysmsg  # import messages (central messages platform)
-from django.conf import settings  # ✅ Required to access .env variables like RECAPTCHA keys
-import requests  # ✅ Required to validate reCAPTCHA with Google's API
-from google_auth_oauthlib.flow import Flow
-from dotenv import load_dotenv
-from decouple import config, Csv  # Load .env variables
-import requests
-from django.shortcuts import redirect
-from django.contrib.auth import login
-from django.contrib.auth import get_user_model
-User = get_user_model()
-from google_auth_oauthlib.flow import Flow
-from django.http import HttpResponseBadRequest
-from .models import AuthConfig
+# 📄 Core rendering & redirection
+from django.shortcuts import render, redirect
 
+# 🔐 Auth system: login/logout/session/user
+from django.contrib.auth.views import LoginView                     # Used in CustomLoginView
+from django.contrib.auth.decorators import login_required          # Used in dashboard protection
+from django.contrib.auth import logout, login                      # Used in logout_view and Google login
+from django.contrib.auth import get_user_model                     # Dynamically load CustomUser
 
+# 🔐 Google OAuth2 flow
+from google_auth_oauthlib.flow import Flow                         # Handles authorization redirects and token exchange
+
+# 🔁 URL routing
+from django.urls import reverse, reverse_lazy                      # reverse = for building URLs, reverse_lazy = for class views
+
+# 🧠 Form views and validation
+from django.views.generic import FormView                          # Used by RegisterView (class-based)
+from django.http import HttpResponseBadRequest                     # Used to handle bad OAuth callbacks
+
+# 📩 Forms
+from .forms import RegisterForm                                    # Custom registration form (ModelForm)
+from .forms import EmailLoginForm                                  # Custom login form with reCAPTCHA
+
+# 📢 Messaging system (flash messages)
+from django.contrib import messages                                # Django messages framework
+from project_root import messages as sysmsg                        # Centralized system messages
+
+# 📅 Utils
+from datetime import datetime                                      # Used to show current date in dashboard
+
+# 📬 Email system
+from django.core.mail import send_mail                             # To send activation email
+from django.template.loader import render_to_string                # To render email body from template
+
+# ⚙️ Environment and settings
+from django.conf import settings                                   # For accessing .env and Django settings
+from decouple import config, Csv                                   # Preferred .env loader
+from dotenv import load_dotenv                                     # Legacy .env loader (not used if decouple is used)
+
+# 🌍 External API requests (Google reCAPTCHA / userinfo)
+import requests                                                    # Used for reCAPTCHA and Google userinfo fetch
+
+# 🔐 Token signing for activation
+from django.core.signing import dumps, loads, BadSignature, SignatureExpired  # Token handling for secure email activation
+
+# 🎛️ Models
+from .models import AuthConfig                                     # Google login toggle model
+
+# 🔧 Local testing config
 import os
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'  # ✅ Only for local or CloudShell testing
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'                    # Allow OAuth over HTTP in dev
 
+#Format to allows ASCI in the e mail sender name
+from email.utils import formataddr
+from email.header import Header
+from django.core.mail import EmailMessage
+
+
+User = get_user_model()
 # ------------------------------------------------------------------------------
 # 🔑 Custom LoginView with reCAPTCHA and 'Keep me signed in' functionality
 # ------------------------------------------------------------------------------
 class CustomLoginView(LoginView):
     """
-    🔐 Custom login view with conditional reCAPTCHA and 'Keep me signed in' support.
-    The form (EmailLoginForm) handles reCAPTCHA validation based on failed attempts.
+    🔐 Custom login view that uses EmailLoginForm.
+    ✅ Enforces reCAPTCHA after 3 failed attempts.
+    ✅ Handles 'Keep me signed in'.
+    ✅ Forces EmailBackend explicitly to avoid Django backend collisions.
     """
     template_name = 'users/login.html'
     authentication_form = EmailLoginForm
@@ -42,24 +73,20 @@ class CustomLoginView(LoginView):
 
     def get_context_data(self, **kwargs):
         """
-        🎯 Add reCAPTCHA public key and condition flag to context (used by template).
+        🔧 Adds reCAPTCHA keys and Google login toggle to template context.
         """
-        
         context = super().get_context_data(**kwargs)
-
-        # 🔐 reCAPTCHA settings
         context["recaptcha_site_key"] = settings.RECAPTCHA_SITE_KEY
         context["show_recaptcha"] = self.request.session.get("login_attempts", 0) >= 3
 
-        # 🔘 Google login toggle (from DB config)
         config = AuthConfig.objects.first()
         context["enable_google_login"] = config.enable_google_login if config else False
-        
+
         return context
 
     def get_form_kwargs(self):
         """
-        🔄 Pass the request to the form so it can access session (used for reCAPTCHA logic).
+        💡 Passes request object to the form for access to session and POST data.
         """
         kwargs = super().get_form_kwargs()
         kwargs["request"] = self.request
@@ -67,36 +94,48 @@ class CustomLoginView(LoginView):
 
     def form_valid(self, form):
         """
-        ✅ Login succeeded: reset login attempts, set session duration, show success message.
+        ✅ Executes when the form is valid:
+        - Uses forced login with EmailBackend.
+        - Skips super().form_valid to avoid backend collisions.
+        - Resets attempts, handles 'Keep me signed in'.
         """
+        user = form.get_user()
+
+        if user is None:
+            messages.error(self.request, sysmsg.MESSAGES["LOGIN_FAILED"])
+            return self.form_invalid(form)
+
+        if not user.is_verified:
+            messages.error(self.request, sysmsg.MESSAGES["ACCOUNT_NOT_ACTIVATED"])
+            return self.form_invalid(form)
+
+        # 🔐 Explicitly force backend to EmailBackend to avoid ValueError
+        login(self.request, user, backend='apps.users.authentication.EmailBackend')
+
         self.request.session["login_attempts"] = 0
 
-        # 💾 Handle "Keep me signed in" option
         remember = self.request.POST.get('remember')
         self.request.session.set_expiry(60 * 60 * 24 * 30 if remember else 0)
 
         messages.success(self.request, sysmsg.MESSAGES["LOGIN_SUCCESS"])
-        return super().form_valid(form)
+
+        # ⛳ Manual redirection (skip super().form_valid)
+        return redirect(self.get_success_url())
+
 
     def form_invalid(self, form):
         """
-        ❌ Login failed: increase login attempts and show failure message.
-        CAPTCHA validation is handled inside the form itself.
+        ❌ Login failed → increment attempts counter and show error.
         """
         self.request.session["login_attempts"] = self.request.session.get("login_attempts", 0) + 1
-
-        print("Login attempts:", self.request.session.get("login_attempts", 0))  # 👈 For debugging
-         
-        # messages.error(self.request, sysmsg.MESSAGES["LOGIN_FAILED"])
+        print(f"Login attempts: {self.request.session.get('login_attempts')}")  # For debugging
         return super().form_invalid(form)
 
     def get_success_url(self):
         """
-        📍 Redirect path after successful login.
+        🚀 Defines the landing page after successful login.
         """
         return reverse_lazy('users:dashboard')
-
-
 
 # ----------------------------
 # views.py in users app
@@ -157,12 +196,55 @@ class RegisterView(FormView):
 
     def form_valid(self, form):
         """
-        If the form is valid, save the new user.
-        You can also handle additional profile data here in the future.
+        ✅ Handles valid user registration:
+        - Saves the new user (is_verified = False)
+        - Generates a signed activation token
+        - Renders email template and sends activation email
         """
-        form.save()
-        messages.success(self.request, sysmsg.MESSAGES["REGISTER_SUCCESS"])  # 👈 Message of registration sucess
+
+        # 💾 Save the user object from the validated form (creates CustomUser instance)
+        user = form.save()
+
+        # 🔐 Generate a signed token with email and user ID (valid for 24h by default)
+        token = dumps({
+            "email": form.cleaned_data["email"],
+            "id": user.id
+        })
+
+        # 🔗 Reverse the URL pattern name to get the activation path
+        activation_path = reverse('users:activate_account')  # Must match urls.py
+
+        # 🌍 Build full activation URL using request context (absolute URI -- from settings/base.py --csrf trusted origins)
+        activation_url = f"{settings.SITE_DOMAIN}{activation_path}?token={token}"
+
+        # 📨 Load email body from external plain text template (cleaner than hardcoding)
+        message = render_to_string('emails/activation_email.txt', {
+            "user": user,
+            "activation_url": activation_url
+        })
+
+        # ✉️ Build the FROM header (visible name + email) without affecting SMTP auth
+        from_email_header = formataddr((
+            str(Header(settings.DEFAULT_FROM_NAME, 'utf-8')),
+            settings.DEFAULT_FROM_EMAIL
+        ))
+
+        # 📬 Build and send email using EmailMessage (ensures no auth error with SMTP)
+        email = EmailMessage(
+            subject=sysmsg.MESSAGES["ACTIVATION_SUBJECT"],
+            body=message,
+            #from_email_header,  # ✔️ Will show nicely in the inbox
+            from_email= from_email_header, #settings.DEFAULT_FROM_EMAIL,
+            to=[user.email],
+        )
+        email.send(fail_silently=False)
+
+        # ✅ Show success message via Django messages framework
+        messages.success(self.request, sysmsg.MESSAGES["REGISTER_SUCCESS"])
+
+        # 🔁 Proceed with normal redirection flow (to login page)
         return super().form_valid(form)
+
 
     def form_invalid(self, form):
         """
@@ -242,10 +324,6 @@ def google_login(request):
     return redirect(authorization_url)
 
 
-
-
-
-
 def oauth2callback(request):
     """
     🔁 View: oauth2callback
@@ -264,7 +342,7 @@ def oauth2callback(request):
     state_returned = request.GET.get('state')
 
     if not state_in_session or state_in_session != state_returned:
-        return HttpResponseBadRequest("Invalid state parameter")
+        return HttpResponseBadRequest(sysmsg.MESSAGES["INVALID_STATE"])
 
     # 🔐 Step 2: Reconstruct the Flow object
     flow = Flow.from_client_config(
@@ -297,7 +375,7 @@ def oauth2callback(request):
     )
 
     if not userinfo_response.ok:
-        return HttpResponseBadRequest("Failed to fetch user info from Google")
+        return HttpResponseBadRequest(sysmsg.MESSAGES["USERINFO_FAILED"])
 
     user_data = userinfo_response.json()
     email = user_data.get("email")
@@ -305,17 +383,74 @@ def oauth2callback(request):
     last_name = user_data.get("family_name", "")
 
     if not email:
-        return HttpResponseBadRequest("Email not provided by Google")
+        return HttpResponseBadRequest(sysmsg.MESSAGES["NO_GOOGLE_EMAIL"])
 
     # 👥 Step 5: Find or create the user in Django
     user, created = User.objects.get_or_create(email=email, defaults={
-        "username": email,  # 🧠 If using custom user model, adjust this
+        "username": email,
         "first_name": first_name,
         "last_name": last_name
     })
 
-    # ✅ Step 6: Log in the user
-    login(request, user)
+    # ✅ Step 6: Force login and tell Django exactly which backend to use
+    login(request, user, backend='apps.users.authentication.EmailBackend')
 
     # 🏁 Step 7: Redirect to dashboard or homepage
     return redirect('users:dashboard')
+
+#----------------------------------------------------------------------
+#TOKEN (ACCOUNT ACTIVATION)
+#----------------------------------------------------------------------
+
+def activate_account(request):
+    """
+    🌐 Handles user account activation via secure token.
+    
+    Triggered when user clicks the email confirmation link.
+    The token is signed with SECRET_KEY and expires after 24 hours.
+
+    🔗 Related:
+    - Token generated with dumps() after registration
+    - Linked to: /users/activate/?token=<signed_token>
+    - Uses centralized MESSAGES system for feedback
+    """
+
+    token = request.GET.get("token")
+
+    if not token:
+        return HttpResponseBadRequest(sysmsg.MESSAGES["GENERIC_ERROR"])
+        # Impacts: /users/activate/ with no token in URL
+
+    try:
+        # ✅ Extract signed data from token (email, id) and validate expiration
+        data = loads(token, max_age=86400)  # 24 hours in seconds
+        email = data["email"]
+
+    except SignatureExpired:
+        # ⛔ Token expired
+        return HttpResponseBadRequest(sysmsg.MESSAGES["TOKEN_EXPIRED"])
+
+    except (BadSignature, KeyError):
+        # ⛔ Token modified or structure invalid
+        return HttpResponseBadRequest(sysmsg.MESSAGES["INVALID_TOKEN"])
+
+    try:
+        # 👤 Fetch the user from DB using email
+        user = User.objects.get(email=email)
+
+    except User.DoesNotExist:
+        # ⛔ If token is valid but email not found (edge case)
+        return HttpResponseBadRequest(sysmsg.MESSAGES["NO_GOOGLE_EMAIL"])
+
+    if user.is_verified:
+        # ℹ️ User already activated – avoid redundant activation
+        messages.info(request,  sysmsg.MESSAGES["VERIFIED_MAIL"])
+        return redirect('users:login')
+
+    # ✅ Activate the user account
+    user.is_verified = True
+    user.save()
+
+    # 🎉 Show success message and redirect to login
+    messages.success(request,  sysmsg.MESSAGES["ACTIVATION_SUCCESS"])
+    return redirect('users:login')

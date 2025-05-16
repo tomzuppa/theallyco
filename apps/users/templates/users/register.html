@@ -1,16 +1,28 @@
 {% extends 'base.html' %}
+{# 🧱 Inherits common structure (header, footer, scripts) from the base layout #}
+
 {% load static %}
-{% load widget_tweaks %} {# 🔄 Allows dynamic styling of form fields via filters #}
+{# 📦 Enables use of {% static %} tag to load CSS, JS, and images #}
+
+{% load widget_tweaks %}
+{# 🎨 Allows dynamic class injection into form fields using filters like |add_class #}
 
 {% block title %}Register | BAOBYTE{% endblock %}
+{# 🧾 Sets the browser tab title #}
+
 {% block body_class %}register-page{% endblock %}
+{# 🎯 Adds a custom class to the body tag for page-specific styling #}
 
 {% block extra_head %}
-<!-- 🎨 Custom CSS for register page -->
+<!-- 🎨 Register-specific CSS styling -->
 <link rel="stylesheet" href="{% static 'css/users/register.css' %}">
-<!-- Google reCAPTCHA -->
+
+<!-- 🔐 Google reCAPTCHA script -->
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock %}
+
+
+
 
 {% block content %}
 <!-- 🖥️ Register page main section -->
@@ -131,6 +143,8 @@
   </div> <!-- end of container -->
 </section>
 {% endblock %}
+
+
 
 {% block extra_js %}
 <!-- 📜 Terms and Conditions Modal -->

@@ -1,7 +1,20 @@
+# 📦 Django admin module for registering and managing models in the admin panel
 from django.contrib import admin
+
+# 🔐 Base admin configuration for user-related models (extends UserAdmin for full auth support)
 from django.contrib.auth.admin import UserAdmin
+
+# 🌐 Enables translation of labels and sections in the admin interface
+# Impacts: Internationalization support for admin labels (used in custom fieldsets and verbose names)
 from django.utils.translation import gettext_lazy as _
+
+# 🧍 Custom user model used across the entire platform for authentication and profile data
+# Impacts: AUTH_USER_MODEL setting (defined in settings/base.py), login, register, and user profile features
 from .models import CustomUser, AuthConfig
+
+# 🛠️ AuthConfig: Custom configuration model to enable/disable authentication features (e.g., Google login)
+# Impacts: Conditional logic in views (like CustomLoginView) and templates (e.g., showing or hiding buttons)
+
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
@@ -41,7 +54,7 @@ class CustomUserAdmin(UserAdmin):
     list_display = (
     'username', 'email', 'first_name', 'last_name',
     'phone', 'country', 'preferred_language',
-    'is_active',     # ✅ ← AÑADIDO
+    'is_active',     # ✅ ← ADDED
     'is_staff',
     'is_verified',
     'password'
@@ -56,6 +69,6 @@ class CustomUserAdmin(UserAdmin):
 
 
 """-----------------------------------------------------------------------
-ENABLE O DISABLE GOOGLE LOGIN BUTTON IN THE LOGIN PAGE FROM ADMIN PANEL
+ENABLE O DISABLE GOOGLE LOGIN BUTTON IN THE LOGIN PAGE FROM ADMIN PANEL (AuthConfig)
 -------------------------------------------------------------------------"""
 admin.site.register(AuthConfig)

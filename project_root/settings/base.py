@@ -54,6 +54,7 @@ ROOT_URLCONF = 'project_root.urls'
 # Login no longer uses username, now handled via email through custom backend
 AUTHENTICATION_BACKENDS = [
     'apps.users.authentication.EmailBackend',  # (login with email)
+    'django.contrib.auth.backends.ModelBackend',  # 🔐 To do login in admin portal
 ]
 
 
@@ -188,6 +189,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://8080-cs-61983882132-default.cs-us-central1-pits.cloudshell.dev',
 ]
 
+# 🧠 Use the first trusted origin as the site domain for activation URLs (sending tokens)
+SITE_DOMAIN = CSRF_TRUSTED_ORIGINS[0]
 # -----------------------------------
 # ⚙️ Primary Key Field Type
 # -----------------------------------
@@ -199,3 +202,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # -----------------------------------
 RECAPTCHA_SITE_KEY = config("RECAPTCHA_SITE_KEY")
 RECAPTCHA_SECRET_KEY = config("RECAPTCHA_SECRET_KEY")
+
+# -----------------------------------
+# 📬 Email configuration (loaded from .env)
+# -----------------------------------
+#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" #Test
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" #Prod
+DEFAULT_FROM_NAME = config("DEFAULT_FROM_NAME")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_PORT = config("EMAIL_PORT", cast=int)
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD =config("EMAIL_HOST_PASSWORD")

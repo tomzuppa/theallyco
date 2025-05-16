@@ -1,12 +1,29 @@
+# 📦 Django form system for handling user input and validation
 from django import forms
 from django.core.exceptions import ValidationError
-from django.contrib.auth import get_user_model  # ✅ Import correct model dynamically
-# ✅ Used for login via email
+
+# ✅ Ensures compatibility with AUTH_USER_MODEL defined in settings.py
+from django.contrib.auth import get_user_model
+
+# 🔐 Used as the base form for login functionality (username + password)
 from django.contrib.auth.forms import AuthenticationForm
-from django.conf import settings  # ✅ Access to environment-based settings
-import requests
+
+# ⚙️ Access environment variables like reCAPTCHA secret
 from django.conf import settings
-from project_root import messages as sysmsg  # import messages (central messages platform)
+
+# 🌐 Used to validate reCAPTCHA tokens with Google's API
+import requests
+
+# 📩 Centralized system message platform (custom app messages)
+from project_root import messages as sysmsg
+
+from django.contrib.auth import authenticate  # ✅ Required for manual login validation
+
+# 🎯 Get the correct user model (CustomUser)
+User = get_user_model()
+
+"""-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------"""
 
 User = get_user_model()  # ✅ This ensures you're using CustomUser correctly
 
@@ -116,7 +133,7 @@ class RegisterForm(forms.ModelForm):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise ValidationError("Passwords do not match.")
+            raise forms.ValidationError(sysmsg.MESSAGES["PASSWORD_MISMATCH"])
         return password2
 
     # 💾 Saves the user with encrypted password – called when form.save() is used in the view
@@ -164,48 +181,68 @@ class RegisterForm(forms.ModelForm):
 # -------------------------------
 # 📄 File: apps/users/forms.py
 # -------------------------------
+User = get_user_model()
+
 class EmailLoginForm(AuthenticationForm):
     """
-    🔐 Custom login form that enforces reCAPTCHA only after 3 failed login attempts.
-    Validates reCAPTCHA BEFORE running Django's default credential check.
+    Custom Login Form using email instead of username.
+    Handles reCAPTCHA only after 3 failed attempts.
     """
 
     def __init__(self, request=None, *args, **kwargs):
-        # 🔗 Attach the request object so we can access session and POST data
-        self.request = request
+        self.request = request  # Store the request object for access in clean()
         super().__init__(request, *args, **kwargs)
 
     def clean(self):
         """
-        ✅ Validate reCAPTCHA if needed, then proceed with normal Django credential check.
+        Full validation:
+        - Check reCAPTCHA (after 3 failed attempts)
+        - Check user exists by email
+        - Check password
         """
-        if not self.request:
-            return super().clean()
+        cleaned_data = super().clean()
 
-        # 📦 Track login attempts from session
-        session = self.request.session
-        attempts = session.get("login_attempts", 0)
+        # 🔐 Validate reCAPTCHA if over threshold
+        if self.request:
+            attempts = self.request.session.get("login_attempts", 0)
+            if attempts >= 3:
+                recaptcha_response = self.request.POST.get("g-recaptcha-response")
+                if not recaptcha_response:
+                    raise forms.ValidationError(sysmsg.MESSAGES["CAPTCHA_REQUIRED"])
 
-        if attempts >= 3:
-            # 🧠 Check if the reCAPTCHA token is present
-            recaptcha_response = self.request.POST.get("g-recaptcha-response")
+                response = requests.post(
+                    "https://www.google.com/recaptcha/api/siteverify",
+                    data={
+                        "secret": settings.RECAPTCHA_SECRET_KEY,
+                        "response": recaptcha_response,
+                    }
+                )
+                if not response.json().get("success"):
+                    raise forms.ValidationError(sysmsg.MESSAGES["CAPTCHA_INVALID"])
 
-            # 🚫 If not completed, show user-friendly error
-            if not recaptcha_response:
-                self.add_error(None, sysmsg.MESSAGES["CAPTCHA_REQUIRED"])
-                return super().clean()
+        # 🔑 Custom email + password check (without backend yet)
+        email = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
 
-            # ✅ Validate the token with Google's API
-            verify_url = "https://www.google.com/recaptcha/api/siteverify"
-            response = requests.post(verify_url, data={
-                "secret": settings.RECAPTCHA_SECRET_KEY,
-                "response": recaptcha_response,
-            })
-            result = response.json()
+        if email and password:
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                raise forms.ValidationError(sysmsg.MESSAGES["LOGIN_FAILED"])
 
-            if not result.get("success"):
-                self.add_error(None, sysmsg.MESSAGES["CAPTCHA_INVALID"])
-                return super().clean()
+            if not user.check_password(password):
+                raise forms.ValidationError(sysmsg.MESSAGES["LOGIN_FAILED"])
 
-        # 🔐 Credentials check (email/password)
-        return super().clean()
+            # ✅ Let Django handle 'is_active' (but we will handle 'is_verified' in the View)
+            self.confirm_login_allowed(user)
+
+            # 🔗 Store user for later usage in the View (self.user_cache)
+            self.user_cache = user
+
+        return self.cleaned_data
+
+    def get_user(self):
+        """
+        Expose the validated user object.
+        """
+        return getattr(self, 'user_cache', None)

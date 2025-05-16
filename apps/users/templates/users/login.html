@@ -1,47 +1,54 @@
 {% extends 'base.html' %}
+{# 🧱 Inherits from the base layout. Provides shared HTML structure (navbar, footer, etc.) #}
+
 {% load static %}
+{# 📦 Enables the use of the 'static' template tag to reference static files like CSS/JS/images #}
 
 {% block title %}Login - BAOBYTE{% endblock %}
+{# 🧾 Sets the page title dynamically for SEO and browser tab #}
 
 {% block extra_head %}
-<!-- Linking the specific CSS file for login page -->
+<!-- 🎨 Loads custom CSS styles specific to the login page -->
 <link rel="stylesheet" href="{% static 'css/users/login.css' %}">
-<!-- Google captcha -->
+
+<!-- 🔐 Loads Google reCAPTCHA API to be used later in the form -->
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock %}
+
 
 {% block content %}
 <section class="login-section">
   <div class="login-container d-flex">
     
-    <!-- Left side: Image container (65% of the width) -->
+    <!-- 🖼️ Left panel: Decorative image, 65% of the screen width -->
     <div class="login-image-container">
       <img src="{% static 'img/login_page_img.jpg' %}" alt="Login image" class="login-image">
     </div>
 
-    <!-- Right side: Form container (35% of the width) -->
+    <!-- 🔐 Right panel: Login form UI (35%) -->
     <div class="login-form-container d-flex align-items-center justify-content-center">
       
-      <!-- Login Form -->
+      <!-- 📝 Login form -->
       <form method="post" action="{% url 'users:login' %}" class="login-form">
         {% csrf_token %}
+        {# 🔒 Prevents CSRF attacks by including a secure token #}
 
-        <!-- Title of the login form -->
+        <!-- 👋 Welcome text -->
         <h2 class="form-title">Welcome Back</h2>
 
-          <!-- 🔴 Inline form errors (e.g. CAPTCHA not checked) -->
-              {% if form.non_field_errors %}
-              <div class="alert alert-danger text-center mt-2">
-                {{ form.non_field_errors }}
-              </div>
-              {% endif %}
+        <!-- ❌ Inline errors (e.g., reCAPTCHA not solved, wrong credentials) -->
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger text-center mt-2">
+          {{ form.non_field_errors }}
+        </div>
+        {% endif %}
 
-        <!-- Email input field -->
+        <!-- 📧 Email input (Django uses 'username' as the field name by default) -->
         <div class="form-group">
           <input type="email" name="username" class="form-control" placeholder="Email address" required>
         </div>
 
-        <!-- Password input field with toggle visibility icon -->
+        <!-- 🔑 Password input + toggle eye icon -->
         <div class="form-group position-relative">
           <input type="password" name="password" id="id_password" class="form-control" placeholder="Password" required>
           <span id="togglePassword" class="field-icon toggle-password">
@@ -49,34 +56,34 @@
           </span>
         </div>
 
-        <!-- Options: "Keep me signed in" checkbox + "Forgot password" link -->
+        <!-- 🧠 User options: Keep me signed in + Forgot password -->
         <div class="form-options d-flex justify-content-between">
           <div class="form-check">
             <input type="checkbox" class="form-check-input" id="remember" name="remember">
-            <label class="form-check-label" for="remember" title="Stay signed in for faster access next time" >Keep me signed in</label>
+            <label class="form-check-label" for="remember" title="Stay signed in for faster access next time">
+              Keep me signed in
+            </label>
           </div>
-          <a href="#" class="small-link">Forgot password?</a>
+          <a href="#" class="small-link">Forgot password?</a> {# 🔜 Optional feature for future implementation #}
         </div>
 
+        <!-- ✅ Google reCAPTCHA field (only shown after 3 failed attempts) -->
+        {% if show_recaptcha %}
+        <div class="form-group d-flex justify-content-center mt-3 mb-3">
+          <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>
+        </div>
+        {% endif %}
 
-         <!-- GOOGLE CAPTCHA START-->
-         {% if show_recaptcha %}
-         <div class="form-group d-flex justify-content-center mt-3 mb-3">
-           <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>
-         </div>
-       {% endif %}
-        
-       
-        <!-- Login button -->
+        <!-- 🚀 Submit button -->
         <button type="submit" class="btn btn-primary btn-block mt-4">Login</button>
-        <!-- Link to the register page -->
+
+        <!-- 🆕 Register link -->
         <div class="text-center mt-3">
           <span class="small-text">Don't have an account?</span>
           <a href="{% url 'users:register' %}" class="link-primary">Register</a>
         </div>
 
-        
-        <!-- 🌐 Google Login Button -->
+        <!-- 🌐 Optional Google login button -->
         {% if enable_google_login %}
         <div class="d-grid gap-2 mt-3">
           <a href="{% url 'users:google_login' %}" class="btn btn-outline-info">
@@ -84,20 +91,20 @@
             Login with Google
           </a>
         </div>
-      {% endif %}
-
-
+        {% endif %}
       </form>
-      <!-- End of Login Form -->
+      <!-- ✅ End of login form -->
 
     </div>
-    <!-- End of Form container -->
+    <!-- ✅ End of right-side form container -->
 
   </div>
 </section>
 {% endblock %}
 
+
+
 {% block extra_js %}
-<!-- Linking the JavaScript file for login-specific interactions -->
+<!-- ⚙️ JavaScript file that controls password visibility toggle and form UX -->
 <script src="{% static 'js/users_login/login.js' %}"></script>
 {% endblock %}
