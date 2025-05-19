@@ -5,9 +5,9 @@
 {# 📦 Enables use of {% static %} tag to load CSS, JS, and images #}
 
 {% load widget_tweaks %}
-{# 🎨 Allows dynamic class injection into form fields using filters like |add_class #}
+{# 🎨 Allows dynamic class injection into form fields using filters like |add_class and |attr #}
 
-{% block title %}Register | BAOBYTE{% endblock %}
+{% block title %}Register | {{ COMPANY_NAME }} {% endblock %}
 {# 🧾 Sets the browser tab title #}
 
 {% block body_class %}register-page{% endblock %}
@@ -31,17 +31,17 @@
     <div class="row d-flex align-items-center justify-content-center h-100">
 
       <!-- 🔶 LEFT: Marketing text block (only visible on md+ screens) -->
-          <div class="col-md-6 text-light d-none d-md-block register-info text-center">
-            <h1 class="fw-bold">
-              <span class="headline-main">The best offer</span><br>
-              <span class="headline-sub">for your business</span>
-            </h1>
-            <p class="text-muted paragraph-color fs-5 mt-4">
-              Join the BAOBYTE platform and take your projects<br>
-              to the next level. We care about security,<br>
-              style, and performance.
-            </p>
-          </div>
+      <div class="col-md-6 text-light d-none d-md-block register-info text-center">
+        <h1 class="fw-bold">
+          <span class="headline-main">The best offer</span><br>
+          <span class="headline-sub">for your business</span>
+        </h1>
+        <p class="text-muted paragraph-color fs-5 mt-4">
+          Join the {{ COMPANY_NAME }}  platform and take your projects<br>
+          to the next level. We care about security,<br>
+          style, and performance.
+        </p>
+      </div>
 
 
       <!-- 🔷 RIGHT: Registration form block -->
@@ -62,13 +62,13 @@
               <!-- 👥 First Name and Last Name fields (side-by-side) -->
               <div class="row mb-3">
                 <div class="col">
-                  {{ form.first_name|add_class:"form-control form-control-app" }}
+                  {{ form.first_name|add_class:"form-control form-control-app"|attr:"placeholder:First Name" }}
                   {% if form.first_name.errors %}
                     <div class="text-danger small">{{ form.first_name.errors }}</div>
                   {% endif %}
                 </div>
                 <div class="col">
-                  {{ form.last_name|add_class:"form-control form-control-app" }}
+                  {{ form.last_name|add_class:"form-control form-control-app"|attr:"placeholder:Last Name" }}
                   {% if form.last_name.errors %}
                     <div class="text-danger small">{{ form.last_name.errors }}</div>
                   {% endif %}
@@ -77,7 +77,7 @@
 
               <!-- 🧾 Username field -->
               <div class="mb-3">
-                {{ form.username|add_class:"form-control form-control-app" }}
+                {{ form.username|add_class:"form-control form-control-app"|attr:"placeholder:Username" }}
                 {% if form.username.errors %}
                   <div class="text-danger small">{{ form.username.errors }}</div>
                 {% endif %}
@@ -85,7 +85,7 @@
 
               <!-- 📧 Email field -->
               <div class="mb-3">
-                {{ form.email|add_class:"form-control form-control-app" }}
+                {{ form.email|add_class:"form-control form-control-app"|attr:"placeholder:Email" }}
                 {% if form.email.errors %}
                   <div class="text-danger small">{{ form.email.errors }}</div>
                 {% endif %}
@@ -93,7 +93,7 @@
 
               <!-- 🔐 Password field -->
               <div class="mb-3">
-                {{ form.password1|add_class:"form-control form-control-app" }}
+                {{ form.password1|add_class:"form-control form-control-app"|attr:"placeholder:Password" }}
                 {% if form.password1.errors %}
                   <div class="text-danger small">{{ form.password1.errors }}</div>
                 {% endif %}
@@ -101,7 +101,7 @@
 
               <!-- 🔐 Confirm Password field -->
               <div class="mb-3">
-                {{ form.password2|add_class:"form-control form-control-app" }}
+                {{ form.password2|add_class:"form-control form-control-app"|attr:"placeholder:Confirm Password" }}
                 {% if form.password2.errors %}
                   <div class="text-danger small">{{ form.password2.errors }}</div>
                 {% endif %}
@@ -115,7 +115,6 @@
                 </label>
               </div>
 
-            
               <!-- GOOGLE reCAPTCHA -->
               <div class="form-group d-flex justify-content-center mt-3 mb-3">
                 <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>
@@ -186,4 +185,3 @@
   </div>
 </div>
 {% endblock %}
-

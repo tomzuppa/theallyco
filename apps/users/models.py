@@ -1,41 +1,51 @@
-# 🔐 Imports Django's abstract base user class to extend authentication logic
-# Impacts: CustomUser inherits username, password, groups, permissions, and auth methods
-from django.contrib.auth.models import AbstractUser
+# ------------------------
+# 🔐 Django AbstractUser for authentication extension
+# ------------------------
+from django.contrib.auth.models import AbstractUser  # Inherits Django's core user logic (username, password, groups, permissions, etc.)
 
-# 🧱 Django ORM tools for defining database models
-# Impacts: Enables defining fields like CharField, BooleanField, DateTimeField, etc.
+# ------------------------
+# 🧱 Django model base (ORM)
+# ------------------------
 from django.db import models
 
 
+# ------------------------
+# 👤 CustomUser model (extends AbstractUser)
+# ------------------------
 class CustomUser(AbstractUser):
     """
-    👤 Custom user model extending Django's AbstractUser base class.
+    Custom user model that extends Django's AbstractUser.
 
-    Impacts:
-    - Used across the platform as the primary user model (AUTH_USER_MODEL)
-    - Supports email login, Google login, and extended profile fields
-    - Integrated into all authentication views and registration forms
+    🔐 Used as the main user class via AUTH_USER_MODEL in settings.py.
+
+    ✅ Adds support for:
+    - Email-based login
+    - Google login integration
+    - Profile picture
+    - Account verification (2FA-like)
+    - Extra profile fields (phone, country, postal code, language)
+
+    Referenced in:
+    - Login and registration views (views.py)
+    - Forms like RegisterForm and EmailLoginForm (forms.py)
+    - Token validation (activate_account)
     """
 
-    # 📧 Primary login identifier (required for custom authentication and OAuth2)
+    # Email used as login credential (must be unique)
     email = models.EmailField(unique=True)
 
-    # 🖼️ Optional profile picture (used in user profile and dashboard UI)
+    # Optional profile picture (avatar)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
 
-    # 🔐 Email verification status (used for 2FA, restricted access, etc.)
+    # Whether user verified their email address (via token)
     is_verified = models.BooleanField(default=False)
 
-    # ☎️ User's contact number (optional, for profile or notifications)
+    # Optional contact fields
     phone = models.CharField(max_length=20, blank=True, null=True)
-
-    # 🌍 Country field for user segmentation or localization
     country = models.CharField(max_length=50, blank=True, null=True)
-
-    # 🏤 Postal code for geographic segmentation or address data
     postal_code = models.CharField(max_length=10, blank=True, null=True)
 
-    # 🌐 Preferred language for multilingual platform support
+    # Preferred language (used in i18n features)
     preferred_language = models.CharField(
         max_length=10,
         choices=[('en', 'English'), ('es', 'Español'), ('fr', 'Français')],
@@ -43,23 +53,26 @@ class CustomUser(AbstractUser):
     )
 
     def __str__(self):
-        # Impacts: Displayed in admin and logging/debugging tools
+        """
+        Returns the username for admin display and logging purposes.
+        """
         return self.username
 
 
-
-"""-----------------------------------------------------------------------
-ENABLE O DISABLE GOOGLE LOGIN BUTTON IN THE LOGIN PAGE FROM ADMIN PANEL
--------------------------------------------------------------------------"""
-
+# ------------------------
+# 🎛️ AuthConfig (admin-toggleable authentication settings)
+# ------------------------
 class AuthConfig(models.Model):
     """
-    🎛️ Centralized authentication configuration model.
+    Centralized configuration model for toggling authentication options.
 
-    Impacts:
-    - Enables or disables the Google login button dynamically from the admin panel
-    - Used in CustomLoginView to conditionally render the button
-    - Supports future expansion for global auth-related flags (e.g., 2FA, password reset toggle, etc.)
+    💡 Used to:
+    - Enable/disable the Google login button from the admin panel
+    - Plan for future features like password reset toggle, 2FA enforcement, etc.
+
+    Referenced in:
+    - CustomLoginView → renders Google login button conditionally
+    - Django admin → editable via UI
     """
 
     enable_google_login = models.BooleanField(
@@ -67,9 +80,11 @@ class AuthConfig(models.Model):
         help_text="Enable login with Google"
     )
 
-    # 📅 Tracks last update timestamp for auditing changes to authentication settings
+    # Auto-updated timestamp for auditing
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        # Impacts: Label used in Django admin interface for this singleton config
+        """
+        Display label in Django admin panel.
+        """
         return "Authentication Settings"

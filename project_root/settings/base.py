@@ -71,6 +71,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'project_root.settings.context_processors.current_year',  #assigning dinamically the current year (templates)
+                'project_root.settings.context_processors.company_name', #name of the company (variable)
 
             ],
         },
@@ -215,3 +216,8 @@ EMAIL_PORT = config("EMAIL_PORT", cast=int)
 EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool)
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD =config("EMAIL_HOST_PASSWORD")
+
+# -----------------------------------
+# Company name (white label ready)
+# -----------------------------------
+COMPANY_NAME = 'Baobyte'

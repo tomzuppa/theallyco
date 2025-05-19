@@ -1,3 +1,5 @@
+
+
 // 👁️ Toggle password visibility while pressing the eye icon
 document.addEventListener('DOMContentLoaded', function() {
   const passwordInput = document.getElementById('id_password');

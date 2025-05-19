@@ -1,0 +1,1 @@
+source /home/tzuppa/x-pyenvs/djangodev/bin/activate

@@ -6,5 +6,5 @@ setTimeout(function() {
       let alertInstance = bootstrap.Alert.getOrCreateInstance(alert);
       alertInstance.close();
     });
-  }, 5000); //seconds (s * 1000)
+  }, 10000); //seconds (calculation is = seconds * 1000 = 10,000 (example))
   

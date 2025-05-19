@@ -1,0 +1,128 @@
+/* 
+  🎨 Verify Account Page Styles
+  ----------------------------------------
+  Elegant dark-mode layout for token validation screen.
+  Modular, responsive, and BAOBYTE-approved.
+  Author: Michingón style
+*/
+
+/* 🌑 Dark background, full viewport height, center aligned */
+.verify-dark-body {
+    background-color: #1b1c1e;
+    color: #e0e0e0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* 📦 Container to limit width */
+.verify-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+/* 🧱 Box that contains the form and content */
+.verify-box {
+    background-color: #2a2b2d;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+/* 🖼 Logo image */
+.verify-logo {
+    width: 80px;
+    margin-bottom: 20px;
+}
+
+/* 📜 Instructional text below title */
+.verify-instructions {
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+/* ✅ Django messages wrapper */
+.verify-messages {
+    margin-bottom: 15px;
+}
+
+/* 🔔 General message styling */
+.verify-message {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* ❌ Error message style (Django: message.tags = error) */
+.verify-message.error {
+    background-color: #d9534f;
+}
+
+/* ✅ Success message style (Django: message.tags = success) */
+.verify-message.success {
+    background-color: #28a745;
+}
+
+/* 🧾 Token & resend forms */
+.verify-form {
+    margin-bottom: 15px;
+}
+
+/* 🔐 Token input */
+.verify-form input[type="text"],
+.verify-form input[type="password"] {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #3a3b3d;
+    border: 1px solid #555;
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 16px;
+}
+
+/* 🚀 Main buttons (Verify / Resend) */
+.verify-btn {
+    background-color: #0066ff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* 🚪 Exit/Login button style */
+.verify-btn-exit {
+    background-color: #6c757d;
+}
+
+/* ⏸ Disabled resend state */
+.verify-btn:disabled {
+    background-color: #333;
+    cursor: not-allowed;
+}
+
+/* ⏳ Countdown timer */
+.verify-timer {
+    margin-top: 15px;
+    color: #ffcc00;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* ❌ Token field error */
+.verify-error {
+    color: #ff4d4d;
+    font-size: 0.85rem;
+    text-align: center;
+    margin-top: 8px;
+}

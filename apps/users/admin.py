@@ -1,34 +1,40 @@
-# 📦 Django admin module for registering and managing models in the admin panel
-from django.contrib import admin
+# ✅ Cleaned and Documented admin.py for User Management
 
-# 🔐 Base admin configuration for user-related models (extends UserAdmin for full auth support)
-from django.contrib.auth.admin import UserAdmin
+# ------------------------
+# 📦 Django Admin Imports
+# ------------------------
+from django.contrib import admin                          # Base admin interface
+from django.contrib.auth.admin import UserAdmin           # Full UserAdmin for auth model support
+from django.utils.translation import gettext_lazy as _    # Enables i18n for field labels
 
-# 🌐 Enables translation of labels and sections in the admin interface
-# Impacts: Internationalization support for admin labels (used in custom fieldsets and verbose names)
-from django.utils.translation import gettext_lazy as _
-
-# 🧍 Custom user model used across the entire platform for authentication and profile data
-# Impacts: AUTH_USER_MODEL setting (defined in settings/base.py), login, register, and user profile features
-from .models import CustomUser, AuthConfig
-
-# 🛠️ AuthConfig: Custom configuration model to enable/disable authentication features (e.g., Google login)
-# Impacts: Conditional logic in views (like CustomLoginView) and templates (e.g., showing or hiding buttons)
+# ------------------------
+# 👤 User and Config Models
+# ------------------------
+from .models import CustomUser, AuthConfig                # AUTH_USER_MODEL + Google login toggle
 
 
+# ------------------------
+# 🧍 CustomUser Admin Configuration
+# ------------------------
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     """
-    Custom admin interface for managing CustomUser fields.
+    Custom admin panel interface for CustomUser model.
+
+    Features:
+    - Extends Django's UserAdmin
+    - Adds new profile fields (avatar, phone, etc.)
+    - Organizes fields into logical sections
+    - Used to manage users via Django admin
     """
 
-    # 🧾 Field groups shown when editing a user
+    # 📂 Grouped fields when editing existing users
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {
             'fields': (
                 'first_name', 'last_name', 'email', 'avatar',
-                'phone', 'country', 'postal_code', 'preferred_language'  # 🆕 New fields
+                'phone', 'country', 'postal_code', 'preferred_language'
             )
         }),
         (_('Permissions'), {
@@ -38,37 +44,38 @@ class CustomUserAdmin(UserAdmin):
         (_('Verification'), {'fields': ('is_verified',)}),
     )
 
-    # 🪪 Fields shown when creating a user
+    # 📂 Fields shown when creating a new user via admin
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
             'fields': (
                 'username', 'password1', 'password2',
                 'first_name', 'last_name', 'email',
-                'phone', 'country', 'postal_code', 'preferred_language'  # 🆕 New fields
+                'phone', 'country', 'postal_code', 'preferred_language'
             ),
         }),
     )
 
-    # 📋 Displayed in the user list table
+    # 📋 Fields shown in the user list view
     list_display = (
-    'username', 'email', 'first_name', 'last_name',
-    'phone', 'country', 'preferred_language',
-    'is_active',     # ✅ ← ADDED
-    'is_staff',
-    'is_verified',
-    'password'
-)
+        'username', 'email', 'first_name', 'last_name',
+        'phone', 'country', 'preferred_language',
+        'is_active', 'is_staff', 'is_verified', 'password'
+    )
 
-    # 🔍 Fields searchable from the admin search box
+    # 🔍 Searchable fields in admin UI
     search_fields = ('username', 'first_name', 'last_name', 'email')
 
-    # 🔡 Default sorting of the user list
+    # 🔡 Default sort order
     ordering = ('username',)
 
 
-
-"""-----------------------------------------------------------------------
-ENABLE O DISABLE GOOGLE LOGIN BUTTON IN THE LOGIN PAGE FROM ADMIN PANEL (AuthConfig)
--------------------------------------------------------------------------"""
+# ------------------------
+# 🎛️ AuthConfig Admin Toggle (Google Login)
+# ------------------------
 admin.site.register(AuthConfig)
+"""
+    Registers the AuthConfig model in admin:
+    - Allows enabling/disabling Google login from admin panel
+    - Referenced in: views.CustomLoginView
+"""

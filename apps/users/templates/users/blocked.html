@@ -1,0 +1,29 @@
+<!-- templates/users/blocked.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Access Blocked</title>
+    <!-- 🎨 Custom CSS for blocked page -->
+    <link rel="stylesheet" href="{% static 'css/users/blocked.css' %}">
+</head>
+<body class="blocked-dark-body">
+    <div class="blocked-container">
+        <div class="blocked-box">
+            <img src="{% static 'img/baobyte_logo.png' %}" alt="Baobyte Logo" class="blocked-logo">
+
+            <h2>Access temporarily blocked</h2>
+
+            <p class="blocked-instructions">
+                You've exceeded the maximum activation attempts.<br>
+                For your security, please restart the registration process using a different email address.
+            </p>
+
+            <a href="{% url 'users:register' %}" class="blocked-btn">Register New Account</a>
+
+            <p class="blocked-footer">Baobyte Security System</p>
+        </div>
+    </div>
+</body>
+</html>

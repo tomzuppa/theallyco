@@ -1,0 +1,65 @@
+
+{% load static %}
+{% load widget_tweaks %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verify your account</title>
+    <!-- 🎨 Custom CSS for verify account (inherits global style) -->
+    <link rel="stylesheet" href="{% static 'css/users/verify_account.css' %}">
+</head>
+<body class="verify-dark-body">
+    <div class="verify-container">
+        <div class="verify-box">
+            <img src="{% static 'img/baobyte_logo.png' %}" alt="Logo" class="verify-logo">
+
+            <h2>Verify your account</h2>
+            <p class="verify-instructions">Enter the activation code we sent to your email.</p>
+
+            <!-- ✅ Django messages -->
+            {% if messages %}
+                <div class="verify-messages">
+                    {% for message in messages %}
+                        <div class="verify-message {{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- 🔐 Token input form -->
+            <form method="post" action="" class="verify-form">
+                {% csrf_token %}
+                {{ form.token|add_class:"verify-input" }}
+
+                {% if form.token.errors %}
+                    <div class="verify-error">
+                        {{ form.token.errors.0 }}
+                    </div>
+                {% endif %}
+
+                <button type="submit" class="verify-btn">Verify Account</button>
+            </form>
+
+            <!-- 🔁 Re-send button -->
+            <form method="post" action="" class="verify-form">
+                {% csrf_token %}
+                <input type="hidden" name="resend" value="1">
+                <button type="submit" class="verify-btn" id="resendButton">Re-send Activation Email</button>
+            </form>
+
+            <!-- ⏳ Timer display -->
+            <div id="timer" class="verify-timer"></div>
+
+            <!-- 🚪 Exit button -->
+            <form action="{% url 'users:login' %}">
+                <button type="submit" class="verify-btn verify-btn-exit">Exit / Login Page</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 📜 External JS -->
+    <script src="{% static 'js/system/verify_account.js' %}"></script>
+</body>
+</html>
