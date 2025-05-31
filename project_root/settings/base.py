@@ -221,3 +221,9 @@ EMAIL_HOST_PASSWORD =config("EMAIL_HOST_PASSWORD")
 # Company name (white label ready)
 # -----------------------------------
 COMPANY_NAME = 'Baobyte'
+
+# -----------------------------------
+# Time for token (mail & token expiration time configuration)
+# -----------------------------------
+# 🔐 Token expiration time (in seconds)
+ACTIVATION_TOKEN_EXPIRY = 180  # 180 seconds =  3 minutes

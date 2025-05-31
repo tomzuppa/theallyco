@@ -4,17 +4,17 @@ body.register-page {
   color: #e0e0e0;
 }
 
-/* 📦 Register container card */
+/* 📦 Main register card layout */
 .register-card {
-  background-color: #f0f0f0; /* Very light gray */
+  background-color: #f0f0f0;
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   max-width: 800px;
   width: 100%;
 }
 
-/* 🖊️ Form input styles */
+/* 🖊️ Standard input styling */
 .form-control-app {
   background-color: white;
   border: 1px solid #F8FAFC;
@@ -24,43 +24,43 @@ body.register-page {
   width: 100%;
 }
 
-/* 🎯 Label for inputs */
+/* 🎯 Labels for inputs */
 .register-label {
   margin-bottom: 0.5rem;
   color: #ccc;
   font-weight: 500;
 }
 
-/* ✅ Checkbox styling */
+/* ✅ Checkbox (when selected) */
 .form-check-input:checked {
   background-color: #0066ff;
   border-color: #0066ff;
 }
 
-/* ✅ Accept terms and conditions */
+/* 📜 Label next to checkbox */
 .form-check-label {
   color: #9AA6B2;
 }
 
-/* 🔵 Blue button for Register */
+/* 🔵 Main "Register" button */
 .btn-primary-app {
-  background-color: #0066ff; /* Nice blue */
+  background-color: #0066ff;
   border: none;
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
   width: 100%;
-  transition: background-color 0.3s ease; /* Smooth transition */
+  transition: background-color 0.3s ease;
 }
 
 .btn-primary-app:hover {
-  background-color: #0047b3; /* Darker blue on hover */
-  color: white; /* Keep text white on hover */
+  background-color: #0047b3;
+  color: white;
 }
 
-/* 📝 Text block on the left (Marketing block) */
+/* 📝 Left-side marketing text */
 .headline-main {
-  font-size: 5rem; /* Big orange title */
+  font-size: 5rem;
   color: #FF8000;
   font-weight: bold;
   display: inline-block;
@@ -68,11 +68,11 @@ body.register-page {
 }
 
 .headline-sub {
-  font-size: 3rem; /* Smaller blue subtitle */
+  font-size: 3rem;
   color: #0066ff;
   font-weight: bold;
   display: inline-block;
-  animation: fadeInUp 1.5s ease forwards; /* A little delay for cooler effect */
+  animation: fadeInUp 1.5s ease forwards;
 }
 
 .register-info p {
@@ -81,22 +81,22 @@ body.register-page {
 }
 
 .paragraph-color {
-  color: #ADD8E6; /* Light blue paragraph text */
+  color: #ADD8E6;
 }
 
-/* 🧱 Card and responsive design */
+/* 🧱 Nested card inside the register card */
 .register-card .card {
   background-color: #2c2c2e;
   border: none;
   border-radius: 12px;
 }
 
-/* 📝 Create your account title inside the card */
+/* 🧾 Title inside the form card */
 .register-card .card-body h2 {
   color: #9AA6B2;
 }
 
-/* 📱 Responsive tweaks */
+/* 📱 Mobile-friendly tweaks */
 @media (max-width: 768px) {
   .register-info {
     text-align: center;
@@ -104,7 +104,7 @@ body.register-page {
   }
 }
 
-/* 📌 Footer style (fixed and orange bar) */
+/* 📌 Fixed footer (orange) */
 footer.app-footer {
   position: fixed;
   bottom: 0;
@@ -117,7 +117,7 @@ footer.app-footer {
   z-index: 9999;
 }
 
-/* 🌀 Fade-in animation */
+/* 🌀 Smooth fade-in animation */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -127,4 +127,54 @@ footer.app-footer {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* 💚 Token input (2FA code) */
+.input-token {
+  background-color: #e6ffe6;
+  font-family: monospace;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  width: 20ch;
+  height: 3.5rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid #a5d6a7;
+  border-radius: 8px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  resize: none;
+  display: block;
+  margin: 0 auto 1.5rem auto;
+  box-sizing: border-box;
+}
+
+/* ⛔ Disabled Re-send Code button (before expiration) */
+.btn-resend-disabled {
+  background-color: transparent;
+  color: #9AA6B2;
+  border: 1px dashed #9AA6B2;
+  cursor: not-allowed;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+/* 🍊 Activated Re-send Code button (orange soft theme) */
+.btn-resend-active {
+  background-color: #ffe5cc;        /* Soft orange */
+  border: 1px solid #FF8000;        /* Strong orange border */
+  color: #FF8000;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.btn-resend-active:hover {
+  background-color: #ffcc99;        /* Slightly darker orange */
+  border-color: #FF8000;
+  color: #cc5200;
 }

@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load form_helpers %} {# 🔄 Custom tag to render inputs #}
+
+{% block title %}Register | {{ COMPANY_NAME }}{% endblock %}
+{% block body_class %}register-page{% endblock %}
+
+{% block extra_head %}
+  <!-- 🎨 Custom style for registration flow -->
+  <link rel="stylesheet" href="{% static 'css/users/register.css' %}">
+  <!-- 🔐 Google reCAPTCHA script -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock %}
+
+{% block content %}
+<section class="vh-100 d-flex align-items-center justify-content-center">
+  <div class="container-fluid h-100">
+    <div class="row d-flex align-items-center justify-content-center h-100">
+
+      <!-- 🟧 LEFT SIDE: Branding / Info block -->
+      <div class="col-md-6 text-light d-none d-md-block register-info text-center">
+        <h1 class="fw-bold">
+          <span class="headline-main">The best offer</span><br>
+          <span class="headline-sub">for your business</span>
+        </h1>
+        <p class="text-muted paragraph-color fs-5 mt-4">
+          Join the {{ COMPANY_NAME }} platform and take your projects<br>
+          to the next level. We care about security,<br>
+          style, and performance.
+        </p>
+      </div>
+
+      <!-- 🟦 RIGHT SIDE: Form / Token verification -->
+      <div class="col-md-6">
+        <div class="card register-card shadow">
+          <div class="card-body p-4">
+            <h2 class="text-center mb-4">
+              {% if show_token_field %}Verify Your Account{% else %}Create Your Account{% endif %}
+            </h2>
+
+            <!-- 📝 Main registration / verification form -->
+            <form method="post" action="">
+              {% csrf_token %}
+
+              {# ✅ Include form fields using custom render_input and pass disable_fields flag #}
+              {% include "users/_form_fields_register.html" with disable_fields=show_token_field %}
+
+              {% if show_token_field %}
+                <!-- 🔐 Token input field -->
+                <div class="mb-3">
+                  <textarea name="verification_code"
+                            class="form-control form-control-app input-token"
+                            placeholder="Enter your code"
+                            required
+                            autocapitalize="none"
+                            autocorrect="off"
+                            spellcheck="false"
+                            inputmode="verbatim"
+                            rows="2"></textarea>
+                </div>
+
+                <!-- ⏳ Countdown timer -->
+                <div class="text-center mb-3">
+                  <small class="text-muted">
+                    <span id="token-timer" data-seconds="{{ countdown }}">
+                      Token expires in {{ countdown }} seconds
+                    </span>
+                  </small>
+                </div>
+              {% endif %}
+
+              {% if not show_token_field %}
+              <!-- 🚀 Google reCAPTCHA (centered & scaled) -->
+              <div class="d-flex justify-content-center mt-3 mb-2">
+                <div style="transform: scale(0.85); transform-origin: 0 0;">
+                  <div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_SITE_KEY }}"></div>
+                </div>
+              </div>
+            {% endif %}
+            
+              <!-- 🚀 Submit button -->
+              <button type="submit" class="btn btn-primary-app w-100" id="verify-btn">
+                {% if show_token_field %}Verify Code{% else %}Sign up{% endif %}
+              </button>
+            </form>
+
+            <!-- 🔁 Re-send code form (only in 'verify' step) -->
+            {% if show_token_field %}
+              <form method="post" action="" class="mt-2">
+                {% csrf_token %}
+                <input type="hidden" name="resend" value="1">
+                <button type="submit" class="btn-resend-disabled w-100" id="resend-btn" disabled>
+                  Re-send Code
+                </button>
+              </form>
+            {% endif %}
+
+            <!-- 🔐 Login link -->
+            <div class="text-center mt-3">
+              <a href="{% url 'users:login' %}" class="text-decoration-none text-info small">
+                Already have an account? Log in
+              </a>
+            </div>
+
+          </div> <!-- end of card-body -->
+        </div> <!-- end of card -->
+      </div> <!-- end of col -->
+
+    </div> <!-- end of row -->
+  </div> <!-- end of container -->
+</section>
+{% endblock %}
+
+{% block extra_js %}
+  <!-- ⏱️ Inject token expiration time into JS -->
+  <script>
+    window.ACTIVATION_TOKEN_EXPIRY = {{ countdown|default:180 }};
+  </script>
+
+  <!-- ⏱️ Countdown JS (for token expiration) -->
+  <script src="{% static 'js/system/token_timer.js' %}"></script>
+{% endblock %}

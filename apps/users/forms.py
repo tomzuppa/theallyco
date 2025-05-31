@@ -94,10 +94,22 @@ class RegisterForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
     def clean(self):
+        """
+        Overridden clean method to:
+        - Normalize email and username to lowercase.
+        - Validate reCAPTCHA response (if request object is available).
+        """
         cleaned_data = super().clean()
 
+        # 🔠 Normalize email and username to lowercase
+        if 'email' in cleaned_data:
+            cleaned_data['email'] = cleaned_data['email'].lower()
+        if 'username' in cleaned_data:
+            cleaned_data['username'] = cleaned_data['username'].lower()
+
+        # ✅ reCAPTCHA validation (only if request is present)
         if not self.request:
-            return cleaned_data
+            return cleaned_data  # Exit if request is not passed
 
         recaptcha_response = self.request.POST.get("g-recaptcha-response")
         if not recaptcha_response:
@@ -114,63 +126,40 @@ class RegisterForm(forms.ModelForm):
         if not result.get("success"):
             raise forms.ValidationError(sysmsg.MESSAGES["CAPTCHA_INVALID"])
 
-        return cleaned_data
+        return cleaned_data  # ✅ Always return cleaned_data at the end
 
 
 # ------------------------
-# 🔑 EmailLoginForm (Email-based login + reCAPTCHA)
+# 🔐 EmailLoginForm
 # ------------------------
 class EmailLoginForm(AuthenticationForm):
     """
     Custom login form that uses email instead of username.
-    Validates reCAPTCHA after 3 failed attempts.
+
+    Replaces the default AuthenticationForm to allow login via email.
 
     Used in:
-    - CustomLoginView (views.py)
+    - views.auth.CustomLoginView
     """
-    def __init__(self, request=None, *args, **kwargs):
-        self.request = request
-        super().__init__(request, *args, **kwargs)
 
     def clean(self):
-        cleaned_data = super().clean()
-
-        if self.request:
-            attempts = self.request.session.get("login_attempts", 0)
-            if attempts >= 3:
-                recaptcha_response = self.request.POST.get("g-recaptcha-response")
-                if not recaptcha_response:
-                    raise forms.ValidationError(sysmsg.MESSAGES["CAPTCHA_REQUIRED"])
-
-                response = requests.post(
-                    "https://www.google.com/recaptcha/api/siteverify",
-                    data={
-                        "secret": settings.RECAPTCHA_SECRET_KEY,
-                        "response": recaptcha_response,
-                    }
-                )
-                if not response.json().get("success"):
-                    raise forms.ValidationError(sysmsg.MESSAGES["CAPTCHA_INVALID"])
-
-        email = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
+        """
+        Overrides the default clean() method to:
+        - Lowercase the email
+        - Authenticate using the custom EmailBackend (email instead of username)
+        """
+        email = self.cleaned_data.get("username").lower()
+        password = self.cleaned_data.get("password")
 
         if email and password:
-            try:
-                user = User.objects.get(email=email)
-            except User.DoesNotExist:
-                raise forms.ValidationError(sysmsg.MESSAGES["LOGIN_FAILED"])
-
-            if not user.check_password(password):
-                raise forms.ValidationError(sysmsg.MESSAGES["LOGIN_FAILED"])
-
-            self.confirm_login_allowed(user)
-            self.user_cache = user
+            self.user_cache = authenticate(self.request, username=email, password=password)
+            if self.user_cache is None:
+                raise forms.ValidationError("Invalid email or password.")
+            elif not self.user_cache.is_active:
+                raise forms.ValidationError("This account is inactive.")
 
         return self.cleaned_data
 
-    def get_user(self):
-        return getattr(self, 'user_cache', None)
 
 
 # ------------------------
@@ -184,6 +173,8 @@ class VerifyAccountForm(forms.Form):
     Used in:
     - VerifyAccountView (views.py)
     """
+
+    # 📬 Token input field (text box)
     token = forms.CharField(
         label="Activation Token",
         widget=forms.TextInput(attrs={
@@ -193,13 +184,27 @@ class VerifyAccountForm(forms.Form):
     )
 
     def clean_token(self):
+        """
+        Validates the token:
+        - Ensures the token is not expired
+        - Ensures the token has a valid signature
+        - Extracts the email from the token payload
+        """
         token = self.cleaned_data.get("token")
+
         try:
+            # 🔐 Try to decode the token (valid for 5 minutes = 300 seconds)
             data = loads(token, max_age=300)
+
+            # ✅ Store the email embedded in the token for further use
             self.cleaned_data["email"] = data.get("email")
+
         except SignatureExpired:
+            # ⚠️ Token is expired
             raise forms.ValidationError(sysmsg.MESSAGES["TOKEN_EXPIRED"])
+
         except (BadSignature, KeyError):
+            # ❌ Token is invalid (either tampered or incorrect structure)
             raise forms.ValidationError(sysmsg.MESSAGES["INVALID_TOKEN"])
 
         return token

@@ -40,6 +40,8 @@ MESSAGES = {
     "INVALID_STATE": "Invalid state parameter from Google login.",
     "USERINFO_FAILED": "Failed to fetch user info from Google.",
     "NO_GOOGLE_EMAIL": "Email not provided by Google.",
+    "ACCOUNT_NOT_REGISTERED": "This account is not registered. Please sign up first.",
+    "ACCOUNT_NOT_VERIFIED": "Your account is not verified. Please verify your email first.",
 
     # ✉️ Email Activation Flow
     "TOKEN_EXPIRED": "Activation link has expired. Please register again.",

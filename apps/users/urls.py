@@ -1,52 +1,49 @@
-# 📍 urls.py inside the users app
-# -------------------------------------------------------
-# Defines all user-related routes:
-# - Login/logout with custom views
-# - Registration and dashboard access
-# - Email/token activation and Google OAuth2 login
-# - Centralized verification view (2FA style)
-# - Terms and blocked user page
-# -------------------------------------------------------
+# ---------------------------------------------
+# 🔗 users/urls.py - Routes for user operations
+# ---------------------------------------------
 
-# 🛣️ Django URL routing system
+# 🛠️ Django Core URL handler
 from django.urls import path
 
-# 🔧 Class-based views (CBV)
-from .views import CustomLoginView, RegisterView, VerifyAccountView, BlockedView
-
-# 🔧 Function-based views (FBV)
-from . import views  # Includes: logout_view, dashboard_base, terms, activate_account, google_login
-
-# 🧭 Namespace to allow reverse('users:route_name')
+# 📦 Views for authentication and account flows
+from apps.users import views
+from .views import RegisterTokenView  # 📥 Class-based view for email + token registration
+from .views import TermsView
+# 🔖 App namespace
 app_name = 'users'
 
-# 🌐 Route definitions
+# 🚏 Route definitions for user management
 urlpatterns = [
+    # 🔐 Login page (email + password)
+    path('login/', views.CustomLoginView.as_view(), name='login'),
 
-    # 🔐 Login with email + reCAPTCHA
-    path('login/', CustomLoginView.as_view(), name='login'),
-
-    # 🚪 Logout endpoint (also used by auto-logout script)
+    # 🚪 Logout endpoint
     path('logout/', views.logout_view, name='logout'),
 
-    # 🧾 Registration page (includes email verification & token generation)
-    path('register/', RegisterView.as_view(), name='register'),
+    # 📝 Register with token verification (2-step flow)
+    path('register/', RegisterTokenView.as_view(), name='register'),
 
-    # 🖥️ User dashboard (requires login)
+    # ⛔ Shown if user exceeded allowed attempts or is blocked
+    path('blocked/', views.BlockedView.as_view(), name='blocked'),
+
+    # 📊 Default dashboard after login
     path('dashboard/', views.dashboard_base, name='dashboard'),
 
-    # 📄 Terms and conditions page
-    path('terms/', views.terms, name='terms'),
+    # 📃 Static Terms and Conditions page
+    path("terms/", TermsView.as_view(), name="terms"),
 
-    # 🌐 Google login redirect (starts OAuth2 flow)
+    # 🌐 Google Login endpoint (triggers OAuth flow)
     path('login/google/', views.google_login, name='google_login'),
 
-    # 🔗 Email-based token activation (e.g., from email link)
-    path('activate/', views.activate_account, name='activate_account'),
+    
 
-    # 🔁 2FA-style token entry & resend page (central verification hub)
-    path('verify-account/', VerifyAccountView.as_view(), name='verify_account'),
+    # 🔴 [DEPRECATED] Account activation via email link (no longer used)
+    # path('activate/', views.activate_account, name='activate_account'),
 
-    # 🚫 Blocked users (after exceeding max resend attempts)
-    path('blocked/', BlockedView.as_view(), name='blocked'),
+    # ✅ Optional: Manual token verification fallback (if separate from register)
+    #path('verify-account/', views.VerifyAccountView.as_view(), name='verify_account'),
+
+    # 🔧 [Optional] OAuth callback handler (used for manual Google OAuth2, if needed)
+    # path('oauth2callback/', views.oauth2callback, name='oauth2callback'),
 ]
+

@@ -7,8 +7,6 @@ from django.contrib.auth.models import AbstractUser  # Inherits Django's core us
 # 🧱 Django model base (ORM)
 # ------------------------
 from django.db import models
-
-
 # ------------------------
 # 👤 CustomUser model (extends AbstractUser)
 # ------------------------
@@ -51,6 +49,14 @@ class CustomUser(AbstractUser):
         choices=[('en', 'English'), ('es', 'Español'), ('fr', 'Français')],
         default='en'
     )
+
+    # 🧼 Force lowercase email and username
+    def save(self, *args, **kwargs):
+        if self.email:
+            self.email = self.email.lower()
+        if self.username:
+            self.username = self.username.lower()
+        super().save(*args, **kwargs)    
 
     def __str__(self):
         """

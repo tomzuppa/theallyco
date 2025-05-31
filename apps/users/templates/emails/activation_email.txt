@@ -1,15 +1,12 @@
-Hello {{ user.first_name }},
+Hello !!,
 
 Welcome to Baobyte.
 
 Your activation code is:
 
-{{ token }}
+{{ token_part_b  }}
 
-This code will expire in 5 minutes.
-
-To complete your registration, visit the following page:
-{{ activation_url }}
+This code will expire in {{ expiry_minutes }} minutes.
 
 If the code expires, you can request a new one directly on the same page.
 

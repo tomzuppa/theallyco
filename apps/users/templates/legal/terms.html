@@ -1,17 +1,84 @@
 {% extends 'base.html' %}
+
 {% block title %}Terms and Conditions{% endblock %}
 
+{% block body_class %}terms-page{% endblock %}
+
+{% block extra_head %}
+  <style>
+    /* 📝 Elegant Document Style */
+    .terms-container {
+      background-color: #ffffff;
+      color: #212529;
+      padding: 3rem;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+      max-width: 800px;
+      margin: auto;
+      font-family: Georgia, serif;
+      line-height: 1.7;
+    }
+
+    .terms-container h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .terms-container h2 {
+      font-size: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .terms-container p {
+      margin-bottom: 1rem;
+    }
+
+    .btn-back {
+      display: block;
+      margin: 2rem auto 0;
+      width: fit-content;
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
-<div class="container py-5 text-light">
-  <h1 class="mb-4">Terms and Conditions</h1>
-  <p><strong>1. Acceptance of Terms</strong><br>
-  By creating an account or using our services, you accept and agree to be bound by these Terms and our Privacy Policy.</p>
+<div class="terms-container">
 
-  <p><strong>2. Use of Services</strong><br>
-  You agree to use the platform solely for lawful purposes...</p>
 
-  <!-- Add more sections as needed -->
 
-  <a href="{% url 'users:register' %}" class="btn btn-outline-light mt-4">Back to Register</a>
+
+
+
+
+  <h1>Terms and Conditions</h1>
+
+  <p><strong>Last Updated:</strong> May 30, 2025</p>
+
+  <h2>1. Acceptance of Terms</h2>
+  <p>By creating an account or using our services, you accept and agree to be bound by these Terms and our Privacy Policy.</p>
+
+  <h2>2. Use of Services</h2>
+  <p>You agree to use the platform solely for lawful purposes and in accordance with applicable laws and regulations.</p>
+
+  <h2>3. Account Security</h2>
+  <p>You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.</p>
+
+  <h2>4. Modifications</h2>
+  <p>We reserve the right to update or change these Terms at any time. Continued use of the service after changes constitutes acceptance of those changes.</p>
+
+  <h2>5. Termination</h2>
+  <p>We may suspend or terminate your access to the platform if we believe you are violating any of these Terms.</p>
+
+  <h2>6. Contact</h2>
+  <p>If you have any questions about these Terms, please contact us at <a href="mailto:support@example.com">support@example.com</a>.</p>
+
+
+
+
+
+
+  <!-- 🔙 Close Window -->
+  <button onclick="window.close();" class="btn btn-outline-dark btn-back">Close</button>
 </div>
 {% endblock %}

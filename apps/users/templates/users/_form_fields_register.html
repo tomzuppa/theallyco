@@ -1,0 +1,63 @@
+{% load widget_tweaks %}
+{% load form_helpers %}
+
+{# 🔁 Reusable form layout using the custom render_input tag #}
+
+<!-- 👤 First Name & Last Name -->
+<div class="row mb-3">
+  <div class="col">
+    {% render_input form.first_name "First Name" disable_fields %}
+    {% if form.first_name.errors %}
+      <div class="text-danger small">{{ form.first_name.errors }}</div>
+    {% endif %}
+  </div>
+  <div class="col">
+    {% render_input form.last_name "Last Name" disable_fields %}
+    {% if form.last_name.errors %}
+      <div class="text-danger small">{{ form.last_name.errors }}</div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- 🧾 Username -->
+<div class="mb-3">
+  {% render_input form.username "Username" disable_fields %}
+  {% if form.username.errors %}
+    <div class="text-danger small">{{ form.username.errors }}</div>
+  {% endif %}
+</div>
+
+<!-- 📧 Email -->
+<div class="mb-3">
+  {% render_input form.email "Email" disable_fields %}
+  {% if form.email.errors %}
+    <div class="text-danger small">{{ form.email.errors }}</div>
+  {% endif %}
+</div>
+
+<!-- 🔑 Password -->
+<div class="mb-3">
+  {% render_input form.password1 "Password" disable_fields %}
+  {% if form.password1.errors %}
+    <div class="text-danger small">{{ form.password1.errors }}</div>
+  {% endif %}
+</div>
+
+<!-- 🔒 Confirm Password -->
+<div class="mb-3">
+  {% render_input form.password2 "Confirm Password" disable_fields %}
+  {% if form.password2.errors %}
+    <div class="text-danger small">{{ form.password2.errors }}</div>
+  {% endif %}
+</div>
+
+<!-- 📜 Terms Checkbox (manual since it's not a Django field) -->
+<div class="form-check mb-3">
+  <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+  <label class="form-check-label small text-muted" for="terms">
+    I agree to the 
+    <a href="{% url 'users:terms' %}" target="_blank" rel="noopener noreferrer">
+      Terms and Conditions
+    </a>
+  </label>
+</div>
