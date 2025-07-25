@@ -35,12 +35,21 @@
   {% endif %}
 </div>
 
-<!-- 🔑 Password -->
+<!-- 🔑 Password with checklist -->
 <div class="mb-3">
   {% render_input form.password1 "Password" disable_fields %}
   {% if form.password1.errors %}
     <div class="text-danger small">{{ form.password1.errors }}</div>
   {% endif %}
+
+<!-- ✅ Password checklist (minimal style) -->
+<ul id="password-checklist" class="checklist mt-2">
+  <li id="check-length">At least 8 characters</li>
+  <li id="check-uppercase">One uppercase letter (A-Z)</li>
+  <li id="check-lowercase">One lowercase letter (a-z)</li>
+  <li id="check-number">One number (0-9)</li>
+  <li id="check-symbol">One special character (!@#$...)</li>
+</ul>
 </div>
 
 <!-- 🔒 Confirm Password -->
@@ -53,7 +62,15 @@
 
 <!-- 📜 Terms Checkbox (manual since it's not a Django field) -->
 <div class="form-check mb-3">
-  <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+  <input class="form-check-input"
+         type="checkbox"
+         id="terms"
+         name="terms"
+         {% if disable_fields %}
+           checked disabled
+         {% else %}
+           required
+         {% endif %}>
   <label class="form-check-label small text-muted" for="terms">
     I agree to the 
     <a href="{% url 'users:terms' %}" target="_blank" rel="noopener noreferrer">

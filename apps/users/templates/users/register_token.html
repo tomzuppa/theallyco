@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load widget_tweaks %}
-{% load form_helpers %} {# 🔄 Custom tag to render inputs #}
+{% load form_helpers %}
 
 {% block title %}Register | {{ COMPANY_NAME }}{% endblock %}
 {% block body_class %}register-page{% endblock %}
 
 {% block extra_head %}
-  <!-- 🎨 Custom style for registration flow -->
+  <!-- Reference: static/css/users/register.css - Custom registration styles -->
   <link rel="stylesheet" href="{% static 'css/users/register.css' %}">
-  <!-- 🔐 Google reCAPTCHA script -->
+  <!-- Google reCAPTCHA v2 for bot protection -->
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock %}
 
@@ -18,106 +18,170 @@
   <div class="container-fluid h-100">
     <div class="row d-flex align-items-center justify-content-center h-100">
 
-      <!-- 🟧 LEFT SIDE: Branding / Info block -->
+      <!-- LEFT SIDE: Branding Information (Desktop only) -->
       <div class="col-md-6 text-light d-none d-md-block register-info text-center">
         <h1 class="fw-bold">
-          <span class="headline-main">The best offer</span><br>
-          <span class="headline-sub">for your business</span>
+          <!-- Reference: core/utils.py - get_signup_branding() provides these values -->
+          <span class="headline-main">{{ branding.title }}</span><br>
+          <span class="headline-sub">{{ branding.subtitle }}</span>
         </h1>
         <p class="text-muted paragraph-color fs-5 mt-4">
-          Join the {{ COMPANY_NAME }} platform and take your projects<br>
-          to the next level. We care about security,<br>
-          style, and performance.
+          {{ branding.description|linebreaksbr }}
         </p>
       </div>
 
-      <!-- 🟦 RIGHT SIDE: Form / Token verification -->
+      <!-- RIGHT SIDE: Registration Form -->
       <div class="col-md-6">
         <div class="card register-card shadow">
           <div class="card-body p-4">
+            <!-- Dynamic title based on registration step -->
             <h2 class="text-center mb-4">
-              {% if show_token_field %}Verify Your Account{% else %}Create Your Account{% endif %}
+              {% if show_token_field %}
+                Verify Your Account
+              {% else %}
+                Create Your Account
+              {% endif %}
             </h2>
 
-            <!-- 📝 Main registration / verification form -->
-            <form method="post" action="">
+            <!-- Token status message container for AJAX updates -->
+            <div id="token-status-message"></div>
+
+            <!-- Main registration/verification form -->
+            <form method="post" action="" autocomplete="off" id="verification-form">
               {% csrf_token %}
+              
+              <!-- Include form fields from partial template -->
+              <!-- Reference: templates/users/_form_fields_register.html -->
+              {% include "users/_form_fields_register.html" with disable_fields=disable_fields %}
 
-              {# ✅ Include form fields using custom render_input and pass disable_fields flag #}
-              {% include "users/_form_fields_register.html" with disable_fields=show_token_field %}
-
+              <!-- Verification code input (only shown in verify step) -->
               {% if show_token_field %}
-                <!-- 🔐 Token input field -->
                 <div class="mb-3">
-                  <textarea name="verification_code"
-                            class="form-control form-control-app input-token"
-                            placeholder="Enter your code"
-                            required
-                            autocapitalize="none"
-                            autocorrect="off"
-                            spellcheck="false"
-                            inputmode="verbatim"
-                            rows="2"></textarea>
+                  <label for="verification_code" class="form-label">Verification Code</label>
+                  <textarea 
+                    name="verification_code"
+                    id="verification_code"
+                    class="form-control form-control-app input-token"
+                    placeholder="Enter your 15-character code"
+                    required
+                    {% if not can_verify %}disabled{% endif %}
+                    autocapitalize="none"
+                    autocorrect="off"
+                    spellcheck="false"
+                    maxlength="15"
+                    rows="2"></textarea>
+                  <small class="text-muted">Check your email for the verification code</small>
                 </div>
 
-                <!-- ⏳ Countdown timer -->
+                <!-- Token countdown timer -->
                 <div class="text-center mb-3">
                   <small class="text-muted">
-                    <span id="token-timer" data-seconds="{{ countdown }}">
-                      Token expires in {{ countdown }} seconds
-                    </span>
+                    {% if not token_expired %}
+                      <i class="fas fa-clock"></i>
+                      Time remaining: <span id="countdown-timer" class="fw-bold">{{ countdown }}</span>
+                    {% else %}
+                      <span class="text-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Your code has expired
+                      </span>
+                    {% endif %}
                   </small>
                 </div>
               {% endif %}
 
+              <!-- reCAPTCHA (only for initial registration) -->
               {% if not show_token_field %}
-              <!-- 🚀 Google reCAPTCHA (centered & scaled) -->
-              <div class="d-flex justify-content-center mt-3 mb-2">
-                <div style="transform: scale(0.85); transform-origin: 0 0;">
-                  <div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_SITE_KEY }}"></div>
+                <div class="d-flex justify-content-center mt-3 mb-2">
+                  <div style="transform: scale(0.85); transform-origin: 0 0;">
+                    <div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_SITE_KEY }}"></div>
+                  </div>
                 </div>
-              </div>
-            {% endif %}
-            
-              <!-- 🚀 Submit button -->
-              <button type="submit" class="btn btn-primary-app w-100" id="verify-btn">
-                {% if show_token_field %}Verify Code{% else %}Sign up{% endif %}
+              {% endif %}
+
+              <!-- Submit button with dynamic text and state -->
+              <button 
+                type="submit" 
+                class="btn btn-primary-app w-100" 
+                id="verify-code-button"
+                name="{% if show_token_field %}verify_code{% else %}register{% endif %}"
+                {% if show_token_field and not can_verify %}disabled{% endif %}>
+                {% if show_token_field %}
+                  <span id="verify-button-text">Verify Code</span>
+                {% else %}
+                  Sign up
+                {% endif %}
               </button>
             </form>
 
-            <!-- 🔁 Re-send code form (only in 'verify' step) -->
+            <!-- Resend code form (separate form to handle different action) -->
             {% if show_token_field %}
               <form method="post" action="" class="mt-2">
                 {% csrf_token %}
-                <input type="hidden" name="resend" value="1">
-                <button type="submit" class="btn-resend-disabled w-100" id="resend-btn" disabled>
-                  Re-send Code
+                <button 
+                  type="submit"
+                  class="btn btn-outline-secondary w-100"
+                  id="resend-code-button"
+                  name="resend_code"
+                  {% if not can_resend %}disabled{% endif %}>
+                  <span id="resend-button-text">Re-send Code</span>
                 </button>
               </form>
+              
+              <!-- Show resend attempts remaining -->
+              {% if resend_count > 0 %}
+                <small class="text-muted d-block text-center mt-1">
+                  Resend attempts: {{ resend_count }}/{{ max_resend_count }}
+                </small>
+              {% endif %}
             {% endif %}
 
-            <!-- 🔐 Login link -->
+            <!-- Login link -->
             <div class="text-center mt-3">
               <a href="{% url 'users:login' %}" class="text-decoration-none text-info small">
                 Already have an account? Log in
               </a>
             </div>
 
-          </div> <!-- end of card-body -->
-        </div> <!-- end of card -->
-      </div> <!-- end of col -->
+          </div>
+        </div>
+      </div>
 
-    </div> <!-- end of row -->
-  </div> <!-- end of container -->
+    </div>
+  </div>
 </section>
 {% endblock %}
 
 {% block extra_js %}
-  <!-- ⏱️ Inject token expiration time into JS -->
-  <script>
-    window.ACTIVATION_TOKEN_EXPIRY = {{ countdown|default:180 }};
-  </script>
 
-  <!-- ⏱️ Countdown JS (for token expiration) -->
-  <script src="{% static 'js/system/token_timer.js' %}"></script>
+    {# This script only loads on the initial registration screen (Step 1). #}
+    {% if not show_token_field %}
+        
+        <script src="{% static 'js/users_register/password_checklist.js' %}"></script>
+    
+    {% endif %}
+
+
+    {# These scripts only load on the token verification screen (Step 2). #}
+    {% if show_token_field %}
+
+        <script src="{% static 'js/users_register/token_status_checker.js' %}"></script>
+        
+        <script>
+            /**
+             * Initializes the token status checker with context from the Django backend.
+             * The data is provided by `_render_verification_step()` in `users/views/register.py`.
+             */
+            initTokenStatusChecker({
+              // The initial time in seconds for the countdown.
+              initialCountdown: {{ countdown|default:0 }},
+              
+              // Boolean flags controlling UI state, converted to lowercase for JS compatibility.
+              isExpired: {{ token_expired|yesno:"true,false"|lower }},
+              canVerify: {{ can_verify|yesno:"true,false"|lower }},
+              canResend: {{ can_resend|yesno:"true,false"|lower }}
+            });
+        </script>
+
+    {% endif %}
+
 {% endblock %}

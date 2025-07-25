@@ -7,6 +7,14 @@ from django.contrib.auth.models import AbstractUser  # Inherits Django's core us
 # 🧱 Django model base (ORM)
 # ------------------------
 from django.db import models
+
+# ------------------------
+# 🧱 To have the time zone of the active session
+
+from django.utils import timezone
+
+
+
 # ------------------------
 # 👤 CustomUser model (extends AbstractUser)
 # ------------------------
@@ -49,6 +57,9 @@ class CustomUser(AbstractUser):
         choices=[('en', 'English'), ('es', 'Español'), ('fr', 'Français')],
         default='en'
     )
+    # ✅ Whether the user accepted terms and conditions during registration
+    terms_accepted = models.BooleanField(default=False)
+
 
     # 🧼 Force lowercase email and username
     def save(self, *args, **kwargs):
@@ -94,3 +105,23 @@ class AuthConfig(models.Model):
         Display label in Django admin panel.
         """
         return "Authentication Settings"
+
+
+# ------------------------
+#  🗃️ Logs every password reset attempt in the system.
+# ------------------------
+class PasswordResetLog(models.Model):
+    email = models.EmailField()
+    timestamp = models.DateTimeField(default=timezone.now)
+    successful = models.BooleanField(default=False)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.TextField(null=True, blank=True)
+
+    # 🆕 Device fields
+    device_type = models.CharField(max_length=50, null=True, blank=True)
+    browser = models.CharField(max_length=50, null=True, blank=True)
+    os = models.CharField(max_length=50, null=True, blank=True)
+
+    def __str__(self):
+        status = "✅" if self.successful else "❌"
+        return f"[{status}] {self.email} at {self.timestamp.strftime('%Y-%m-%d %H:%M:%S')}"

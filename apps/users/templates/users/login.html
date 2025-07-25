@@ -6,23 +6,26 @@
 
 {% block title %}Login - {{ COMPANY_NAME }} {% endblock %}
 {# 🧾 Sets the page title dynamically for SEO and browser tab #}
+{% block body_class %}login-page{% endblock %}
+
 
 {% block extra_head %}
 <!-- 🎨 Loads custom CSS styles specific to the login page -->
 <link rel="stylesheet" href="{% static 'css/users/login.css' %}">
-
-<!-- 🔐 Loads Google reCAPTCHA API to be used later in the form -->
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock %}
 
-
 {% block content %}
+
 <section class="login-section">
   <div class="login-container d-flex">
     
     <!-- 🖼️ Left panel: Decorative image, 65% of the screen width -->
     <div class="login-image-container">
-      <img src="{% static 'img/login_page_img.jpg' %}" alt="Login image" class="login-image">
+        {% if branding.image %}
+          <img src="{{ branding.image.url }}" alt="{{ branding.title|default:'Login image' }}" class="login-image">
+        {% else %}
+          <img src="{% static 'img/users/login_page_img.jpg' %}" alt="Default login image" class="login-image">
+        {% endif %}
     </div>
 
     <!-- 🔐 Right panel: Login form UI (35%) -->
@@ -32,6 +35,15 @@
       <form method="post" action="{% url 'users:login' %}" class="login-form">
         {% csrf_token %}
         {# 🔒 Prevents CSRF attacks by including a secure token #}
+         
+
+        <!-- 🔒 Login Icon -->
+          <div class="card-body p-4">
+          <div class="text-center mb-5">
+            <span class="material-symbols-outlined login-icon">
+              login
+            </span>
+          </div>
 
         <!-- 👋 Welcome text -->
         <h2 class="form-title">Welcome Back</h2>
@@ -64,7 +76,7 @@
               Keep me signed in
             </label>
           </div>
-          <a href="#" class="small-link">Forgot password?</a> {# 🔜 Optional feature for future implementation #}
+          <a href="{% url 'users:password_reset' %}" class="small-link">Forgot password?</a> {# 🔜 Optional feature for future implementation #}
         </div>
 
         <!-- ✅ Google reCAPTCHA field (only shown after 3 failed attempts) -->
@@ -86,8 +98,8 @@
         <!-- 🌐 Optional Google login button -->
         {% if enable_google_login %}
         <div class="d-grid gap-2 mt-3">
-          <a href="{% url 'users:google_login' %}" class="btn btn-outline-info">
-            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" width="20" class="me-2">
+          <a href="{% url 'users:google_login' %}" class="btn btn-outline-info google-btn">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="20" class="me-2">
             Login with Google
           </a>
         </div>

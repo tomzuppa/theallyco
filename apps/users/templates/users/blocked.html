@@ -1,29 +1,47 @@
-<!-- templates/users/blocked.html -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Access Blocked</title>
-    <!-- 🎨 Custom CSS for blocked page -->
-    <link rel="stylesheet" href="{% static 'css/users/blocked.css' %}">
-</head>
+    
+    <head>
+        <meta charset="UTF-8">
+        <title>Access Blocked</title>
+      
+        <!-- ✅ Font Awesome from CDN -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+      
+        <!-- 🎨 Custom CSS -->
+        <link rel="stylesheet" href="{% static 'css/users/blocked.css' %}">
+      </head>
+      
+
 <body class="blocked-dark-body">
-    <div class="blocked-container">
-        <div class="blocked-box">
-            <img src="{% static 'img/baobyte_logo.png' %}" alt="Baobyte Logo" class="blocked-logo">
+  <div class="blocked-container">
+    <div class="blocked-box">
 
-            <h2>Access temporarily blocked</h2>
+      <!-- 🛡️ Security icon (animated pulse) -->
+      <div class="icon-wrapper pulse-alert">
+        <i class="fas fa-shield-halved"></i>
+      </div>
 
-            <p class="blocked-instructions">
-                You've exceeded the maximum activation attempts.<br>
-                For your security, please restart the registration process using a different email address.
-            </p>
+      <!-- 🔒 Blocked Title -->
+      <h2 class="blocked-title">Access Temporarily Blocked</h2>
 
-            <a href="{% url 'users:register' %}" class="blocked-btn">Register New Account</a>
+      <!-- 📄 Block reason -->
+      <p class="blocked-instructions">
+        You've exceeded the maximum activation attempts.<br>
+        Our security system has temporarily restricted your registration attempt.
+        <br><br> <!-- ✅ Space before final sentence -->
+        Please use a different email address to continue.
+      </p>
 
-            <p class="blocked-footer">Baobyte Security System</p>
-        </div>
+      <!-- 🟡 Call to action button -->
+      <a href="{% url 'users:register' %}" class="blocked-btn">
+        Register New Account
+      </a>
+
+      <!-- 🧠 Footer system info -->
+      <p class="blocked-footer">Security Layer Active · Baobyte System</p>
     </div>
+  </div>
 </body>
 </html>

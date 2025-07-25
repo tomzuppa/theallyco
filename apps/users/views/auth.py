@@ -10,6 +10,8 @@ from django.contrib.auth.views import LoginView  # Base LoginView to extend
 from django.contrib import messages              # Django flash message system
 from django.conf import settings                 # Project settings (used for reCAPTCHA)
 from project_root import messages as sysmsg      # Custom system messages from central file
+from core.utils import get_signup_branding  # To get the image once it was uploaded to admin repo
+
 
 # 🧠 Custom Forms and Models
 from apps.users.forms import EmailLoginForm     # Custom form using email + password
@@ -44,6 +46,8 @@ class CustomLoginView(LoginView):
 
         config = AuthConfig.objects.first()
         context["enable_google_login"] = config.enable_google_login if config else False
+        context["branding"] = get_signup_branding()
+
         return context
 
     def get_form_kwargs(self):

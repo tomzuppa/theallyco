@@ -1,63 +1,107 @@
-/* static/css/users/blocked.css */
-/**
- * 🎨 Custom styles for Blocked screen.
- * Inspired by Baobyte's dark mode premium UI.
- */
+/* ===============================
+🌙 BLOCKED PAGE STYLES
+File: static/css/users/blocked.css
+Used by: templates/users/blocked.html
+=============================== */
 
- .blocked-dark-body {
+/* 🔲 Full dark background */
+body.blocked-dark-body {
     background-color: #1b1c1e;
     color: #e0e0e0;
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-}
-
-.blocked-container {
+  }
+  
+  /* 📦 Centered container */
+  .blocked-container {
+    max-width: 460px;
     width: 100%;
-    max-width: 400px;
     padding: 20px;
-}
-
-.blocked-box {
+  }
+  
+  /* 💬 Core box: shadow, radius, alignment */
+  .blocked-box {
     background-color: #2a2b2d;
-    padding: 40px;
+    padding: 3rem 2.5rem;
     border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
     text-align: center;
-}
-
-.blocked-logo {
-    width: 80px;
-    margin-bottom: 20px;
-}
-
-.blocked-instructions {
-    font-size: 16px;
+    border: 1px solid #ff4c4c20;
+    font-weight: 400;  /* 👈 Normal text weight */
+  }
+  
+  /* ===============================
+  🛡️ ICON SECTION (centered alert)
+  =============================== */
+  .icon-wrapper {
+    font-size: 3.2rem;
+    color: #ff4c4c;
+    margin-bottom: 1.2rem;
+  }
+  
+  .pulse-alert {
+    animation: pulse 1.6s infinite;
+  }
+  
+  @keyframes pulse {
+    0%   { text-shadow: 0 0 0 rgba(255, 76, 76, 0.3); }
+    50%  { text-shadow: 0 0 12px rgba(255, 76, 76, 0.7); }
+    100% { text-shadow: 0 0 0 rgba(255, 76, 76, 0.3); }
+  }
+  
+  /* ===============================
+  🔴 BLOCKED TITLE
+  =============================== */
+  .blocked-title {
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #ffb3b3;
+    margin-bottom: 1.2rem;
+  }
+  
+  /* ===============================
+  📄 INSTRUCTIONS
+  =============================== */
+  .blocked-instructions {
+    font-size: 0.95rem;
     color: #cccccc;
-    margin-bottom: 30px;
-}
-
-.blocked-btn {
-    background-color: #0066ff;
-    color: white;
-    padding: 12px 30px;
+    line-height: 1.5;
+    margin-bottom: 2.2rem;
+  }
+  
+  /* ===============================
+  🟡 BUTTON: Register New Account
+  =============================== */
+  .blocked-btn {
+    background-color: #f7b500;
+    color: #1e1e1e;
+    padding: 0.75rem 2rem;
     border: none;
     border-radius: 8px;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 1rem;
+    font-weight: 300;
     display: inline-block;
     transition: background-color 0.3s ease;
-}
-
-.blocked-btn:hover {
-    background-color: #0052cc;
-}
-
-.blocked-footer {
-    margin-top: 30px;
-    font-size: 12px;
-    color: #777777;
-}
+  }
+  
+  .blocked-btn:hover {
+    background-color: #e09e00;
+    color: white;
+  }
+  
+  /* ===============================
+  👣 FOOTER
+  =============================== */
+  .blocked-footer {
+    margin-top: 2.5rem;
+    font-size: 0.75rem;
+    color: #888888;
+    font-style: italic;
+    letter-spacing: 0.3px;
+  }
+  

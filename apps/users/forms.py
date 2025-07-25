@@ -10,6 +10,9 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 # ⚙️ Settings and Environment
 from django.conf import settings
@@ -22,6 +25,9 @@ from project_root import messages as sysmsg
 
 # 🔐 Token validation tools
 from django.core.signing import loads, BadSignature, SignatureExpired
+
+# Password reset
+from django.contrib.auth.forms import PasswordResetForm
 
 # Load the correct user model defined in AUTH_USER_MODEL
 User = get_user_model()
@@ -60,6 +66,10 @@ class RegisterForm(forms.ModelForm):
     last_name = forms.CharField(label="Last Name", widget=forms.TextInput(attrs={'class': 'login-dark-input'}))
     email = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={'class': 'login-dark-input'}))
     username = forms.CharField(label="Username", widget=forms.TextInput(attrs={'class': 'login-dark-input'}))
+    terms = forms.BooleanField(
+        required=True,
+        label="I agree to the Terms and Conditions"
+    )
     phone = forms.CharField(required=False, label="Phone", widget=forms.TextInput(attrs={'class': 'login-dark-input'}))
     country = forms.CharField(required=False, label="Country", widget=forms.TextInput(attrs={'class': 'login-dark-input'}))
     postal_code = forms.CharField(required=False, label="Postal Code", widget=forms.TextInput(attrs={'class': 'login-dark-input'}))
@@ -73,6 +83,30 @@ class RegisterForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email')
+
+    def clean_password1(self):
+        """Validate password strength requirements:
+        - At least 8 characters
+        - At least one uppercase letter
+        - At least one lowercase letter
+        - At least one number
+        - At least one special character
+        """
+
+        password = self.cleaned_data.get("password1")
+
+        if len(password) < 8:
+            raise ValidationError(sysmsg.MESSAGES["PASSWORD_TOO_SHORT"])
+        if not any(char.isupper() for char in password):
+            raise ValidationError(sysmsg.MESSAGES["PASSWORD_NO_UPPER"])
+        if not any(char.islower() for char in password):
+            raise ValidationError(sysmsg.MESSAGES["PASSWORD_NO_LOWER"])
+        if not any(char.isdigit() for char in password):
+            raise ValidationError(sysmsg.MESSAGES["PASSWORD_NO_DIGIT"])
+        if not any(not c.isalnum() for c in password):
+            raise ValidationError(sysmsg.MESSAGES["PASSWORD_NO_SPECIAL"])
+        
+        return password
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -208,3 +242,58 @@ class VerifyAccountForm(forms.Form):
             raise forms.ValidationError(sysmsg.MESSAGES["INVALID_TOKEN"])
 
         return token
+
+
+
+# -----------------------------------
+# 📬 Custom Password Reset Form
+# Injects SITE_DOMAIN into email context
+# -----------------------------------
+
+class CustomPasswordResetForm(PasswordResetForm):
+    def get_user_email_context(self):
+        """
+        🔧 Build context with correct domain and protocol for email templates.
+        - Removes protocol from SITE_DOMAIN since it's passed separately.
+        """
+        return {
+            'domain': settings.SITE_DOMAIN.replace("https://", "").replace("http://", ""),
+            'protocol': "https"  # ✅ dynamic if needed
+        }
+
+    def send_mail(self, subject_template_name, email_template_name,
+              context, from_email, to_email, html_email_template_name=None):
+        """
+        📤 Override send_mail to include friendly sender name like:
+        'Administracion <mail@mail.com'
+        """
+        # 🧠 Add domain + protocol context 
+        context.update(self.get_user_email_context())
+
+        # 🏢 ✅ Inject COMPANY_NAME here
+        context["COMPANY_NAME"] = settings.COMPANY_NAME
+
+        # 🏷️ Compose subject manually
+        subject = render_to_string(subject_template_name, context)
+        subject = ''.join(subject.splitlines())  # ✅ Remove newlines
+
+        # 📨 Render plain text body
+        body = render_to_string(email_template_name, context)
+
+        # 👤 Full name + email format
+        friendly_from = f"{settings.DEFAULT_FROM_NAME} <{settings.DEFAULT_FROM_EMAIL}>"
+
+        # 📬 Prepare email
+        email_message = EmailMultiAlternatives(subject, body, friendly_from, [to_email])
+
+        # 🧪 Optional: HTML body
+        if html_email_template_name:
+            html_body = render_to_string(email_template_name, context)
+            email_message.attach_alternative(html_body, "text/html")
+        
+        print("[DEBUG] Email context:")
+        print(context)
+
+
+        # 🚀 Send it!
+        email_message.send()

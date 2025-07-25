@@ -1,19 +1,75 @@
+/* ==========================
+🎨 GLOBAL TOKENS - COLORS & FONTS
+Shared across all components
+========================== */
 
-/***************************************************** */
-/* 🍊 Full-width fixed footer inside an orange banner */
-/***************************************************** */
-.footer-banner {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #ff6600; /* Bright orange */
-    z-index: 999;
-  }
+:root {
+  /* 🎨 Primary theme */
+  --primary-color: #0066ff;
+  --primary-hover: #0052cc;
+  --bg-dark: #050505;
+  /*----------------------------------*/
+  --bg-custom1: #ffffff;    /*#FCECDD*/
+  --bg-custom2: #F3A26D;
+  --bg-custom3: #FF7601;
+  --bg-custom4: #34A853;
+  /*----------------------------------*/
+  --bg-white: #ffffff;
+  --bg-light: #cacfbf;
+  --text-dark: #1b1c1e;
+  --text-dark-light: #626264;
+  --form-control:#f8f9fa;
+  --textarea :#FFFECE;
   
-  .footer-content {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    color: #ffffff;
-  }
-  
+  /*----------------------------------*/
+
+  /* 🌑 Dark mode base */
+  --bg-dark: #1b1c1e;
+  --card-dark: #2a2b2d;
+  --input-dark: #3a3b3d;
+
+  /* ✍️ Typography */
+  --text-light: #e0e0e0;
+  --text-dark: #1b1c1e;
+  --text-muted: #aaa;
+
+  /* 🚨 Alerts */
+  --alert-error: #ff4c4c;
+  --alert-warning: #f7b500;
+  --alert-warning-dark: #f5a100;
+  --success-color: #28a745;
+
+  /* 🧩 Misc */
+  --form-title-color: var(--primary-color);
+  --link-hover: #004ecc;
+  --link-alt-color: #00809D;
+  --link-alt-hover: #e65c00;
+  --toggle-hover: #666;
+}
+
+/* ==========================
+📌 Sticky Footer (Orange)
+Matches: <footer> when body_class is 'login-page'
+========================== */
+
+/* 📌 Sticky Footer (Orange) - shared across login and register */
+footer.footer-banner {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--link-alt-color);
+  color: white;
+  text-align: center;
+  padding: 0.8rem 1rem;
+  font-size: 0.85rem;
+  z-index: 10;
+}
+
+/* 🔪 Delete phantom margins from the explorer */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+  height: 100%;
+}
+

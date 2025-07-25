@@ -1,0 +1,219 @@
+/* ========================== 
+   🔐 AUTH FORMS - Password Reset & Related Forms
+   Uses global.css variables for consistency
+========================== */
+
+/* 📝 Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* 🎨 Auth-specific extensions to global variables */
+:root {
+    --auth-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 15px -5px rgba(0, 0, 0, 0.04);
+    --auth-shadow-hover: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+    --auth-border-radius: 12px;
+    --auth-transition: all 0.3s ease;
+    --auth-card-bg: rgba(255, 255, 255, 0.95);
+    --auth-backdrop: blur(20px);
+    --auth-border: rgba(255, 255, 255, 0.2);
+}
+
+/* 🌍 Body styling for auth pages */
+body.auth-page {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, var(--bg-white) 0%, var(--bg-white) 100%);
+    min-height: 100vh;
+}
+
+/* 🃏 Main auth card */
+.auth-card {
+    background: var(--auth-card-bg);
+    backdrop-filter: var(--auth-backdrop);
+    border-radius: var(--auth-border-radius);
+    box-shadow: var(--auth-shadow);
+    border: 1px solid var(--auth-border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--auth-shadow-hover);
+}
+
+/* 📝 Typography improvements */
+.auth-title {
+    color: var(--text-dark);
+    font-weight: 700;
+    font-size: 1.875rem;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+    color: var(--text-dark-light);
+    font-weight: 400;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+/* 🏷️ Form labels */
+.form-label {
+    color: var(--text-dark);
+    font-weight: 500;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.01em;
+}
+
+/* 📋 Form controls - Enhanced Bootstrap styling */
+.auth-form .form-control {
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--text-dark);
+    background-color: var(--bg-white);
+    transition: var(--auth-transition);
+    box-shadow: none;
+}
+
+.auth-form .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+    outline: none;
+}
+
+.auth-form .form-control::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* 🔘 Primary button styling */
+.auth-form .btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+    border: none;
+    border-radius: 8px;
+    padding: 0.875rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+    transition: var(--auth-transition);
+    box-shadow: 0 4px 14px 0 rgba(0, 102, 255, 0.25);
+}
+
+.auth-form .btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-hover) 0%, #003d99 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px 0 rgba(0, 102, 255, 0.35);
+}
+
+.auth-form .btn-primary:active {
+    transform: translateY(0);
+}
+
+/* 🔗 Links styling */
+.auth-link {
+    color: var(--text-dark-light);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: color 0.2s ease;
+}
+
+.auth-link:hover {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+/* 🤖 reCAPTCHA container */
+.recaptcha-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background-color: var(--form-control);
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+/* 🎯 Icon container */
+.auth-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+/* ➖ Visual divider */
+.auth-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+    margin: 1.5rem 0;
+}
+
+/* 📱 Responsive design */
+@media (max-width: 576px) {
+    .auth-card {
+        margin: 1rem;
+    }
+    
+    .auth-title {
+        font-size: 1.5rem;
+    }
+    
+    .auth-card .card-body {
+        padding: 2rem !important;
+    }
+}
+
+/* ✨ Animations */
+.auth-form-group {
+    animation: slideUpAuth 0.6s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.auth-form-group:nth-child(1) { animation-delay: 0.1s; }
+.auth-form-group:nth-child(2) { animation-delay: 0.2s; }
+.auth-form-group:nth-child(3) { animation-delay: 0.3s; }
+.auth-form-group:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes slideUpAuth {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 🔧 Success/Error states */
+.auth-form .form-control.is-invalid {
+    border-color: var(--alert-error);
+}
+
+.auth-form .form-control.is-valid {
+    border-color: var(--success-color);
+}
+
+/* 🎨 Alert styling within auth forms */
+.auth-form .alert {
+    border-radius: 8px;
+    border: none;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.auth-form .alert-danger {
+    background-color: rgba(255, 76, 76, 0.1);
+    color: var(--alert-error);
+}
+
+.auth-form .alert-success {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: var(--success-color);
+}

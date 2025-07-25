@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _    # Enables i18n for fie
 # 👤 User and Config Models
 # ------------------------
 from .models import CustomUser, AuthConfig                # AUTH_USER_MODEL + Google login toggle
-
+from .models import PasswordResetLog   # Log about passwords resets
 
 # ------------------------
 # 🧍 CustomUser Admin Configuration
@@ -60,7 +60,8 @@ class CustomUserAdmin(UserAdmin):
     list_display = (
         'username', 'email', 'first_name', 'last_name',
         'phone', 'country', 'preferred_language',
-        'is_active', 'is_staff', 'is_verified', 'password'
+        'is_active', 'is_staff', 'is_verified', 'password',
+         'terms_accepted'
     )
 
     # 🔍 Searchable fields in admin UI
@@ -79,3 +80,37 @@ admin.site.register(AuthConfig)
     - Allows enabling/disabling Google login from admin panel
     - Referenced in: views.CustomLoginView
 """
+
+
+# --------------------------------------------------
+# Admin configuration to manage logs (attempts to reset password)
+# --------------------------------------------------
+# 🛡️ Registers the PasswordResetLog model in Django Admin
+@admin.register(PasswordResetLog)
+class PasswordResetLogAdmin(admin.ModelAdmin):
+    # 🖥️ Columns to display in the admin list view
+    list_display = ("email", "successful", "ip_address", "user_agent","device_type", "browser", "os", "timestamp")
+
+    # 🔍 Filters available in the sidebar (for quick filtering)
+    list_filter = ("successful", "timestamp")
+
+    # 🔎 Fields that can be searched via the admin search bar
+    search_fields = ("email", "ip_address", "user_agent")
+
+    # ⏱️ Default ordering for list view (most recent attempts first)
+    ordering = ("-timestamp",)
+
+    # 🔒 Fields that are read-only (no editing allowed through admin UI)
+    readonly_fields = ("email", "successful", "ip_address", "user_agent", "timestamp")
+
+    # 🚫 Disables the "Add" button in the admin for this model
+    def has_add_permission(self, request):
+        return False
+
+    # 🚫 Disables editing of existing entries
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    # 🚫 Disables deletion of log entries from admin
+    def has_delete_permission(self, request, obj=None):
+        return False

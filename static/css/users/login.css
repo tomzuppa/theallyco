@@ -1,203 +1,258 @@
-/* -------------------------------------------------
-🌐  Styles for the Login Page
-------------------------------------------------- */
+/* ==========================
+🧩 Login Page Layout Styles
+Connected to base.html + global.css (tokens only)
+========================== */
 
-/* Affects: <section class="login-section"> 
-   --> Sets full viewport height and background color */
-   .login-section {
-    min-height: 100vh;
-    background-color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  /* Affects: <div class="login-container d-flex">
-     --> Divides the page into two parts: image and form */
+/* 🔲 Styles for <section class="login-section"> in login.html */
+.login-section {
+  min-height: 100vh;
+  background-color: var(--bg-custom1); /* Main dark background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 📦 Styles for <div class="login-container d-flex"> in login.html */
+.login-container {
+  width: 90%;
+  max-width: 1400px;
+  height: 80vh;
+  display: flex;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: var(--bg-custom1); /* Container background */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+/* ==========================
+🖼️ Left Panel (Login Image)
+Matches: <div class="login-image-container"> in login.html
+========================== */
+
+.login-image-container {
+  flex: 0 0 65%;
+  background-color: var(--bg-custom1); /* Matches container background */
+  position: relative;
+}
+
+/* Matches: <img class="login-image"> inside login-image-container */
+.login-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures image covers the area */
+}
+
+/* ==========================
+📝 Right Panel (Login Form)
+Matches: <div class="login-form-container"> in login.html
+========================== */
+
+.login-form-container {
+  flex: 0 0 35%;
+  background-color: var(--bg-white);
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Matches: <form class="login-form"> in login.html */
+.login-form {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* ==========================
+🔒 Login Icon
+Matches: <span class="material-symbols-outlined login-icon">
+========================== */
+
+.login-icon {
+  font-size: 60px;
+  color: var(--text-muted); /* Accent color */
+}
+
+/* ==========================
+👋 Welcome Text
+Matches: <h2 class="form-title">Welcome Back</h2>
+========================== */
+.form-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* ==========================
+📧 and 🔑 Input Fields
+Matches:
+- <input type="email" class="form-control">
+- <input type="password" class="form-control">
+========================== */
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-control {
+  width: 100%;
+  height: 48px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--text-muted);
+  border-radius: 8px;
+  background-color: var( --form-control);
+  color: var(--text-dark);
+}
+
+/* ==========================
+👁️ Password Visibility Toggle
+Matches: <span id="togglePassword" class="field-icon toggle-password">
+========================== */
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.toggle-password:hover {
+  color: var(--toggle-hover);
+}
+
+/* ==========================
+🧠 User Options (Remember me + Forgot password)
+Matches: <div class="form-options">
+========================== */
+
+.form-options {
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.form-check-input {
+  margin-top: 0.3rem;
+}
+
+/* ==========================
+🚀 Login Button
+Matches: <button type="submit" class="btn btn-primary btn-block mt-4">
+========================== */
+
+.btn-primary {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  background-color: var(--primary-color);
+  border: none;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+
+/* ==========================
+🧭 Links: Forgot password & Register
+Matches:
+- <a class="small-link">
+- <a class="link-primary">
+========================== */
+
+.small-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.small-link:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+.small-text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.link-primary {
+  color: var(--link-alt-color);
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.link-primary:hover {
+  color: var(--link-alt-hover);
+  text-decoration: underline;
+}
+
+/* 🧼 Reset all styles to make the Google button simple */
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0.4rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  border-radius: 8px;
+  background-color: transparent;
+  border: 1px solid var(--google-btn-border, #4285F4);
+  color: var(--google-btn-text, #4285F4);
+  text-decoration: none;
+  transition: border-color 0.2s ease;
+}
+
+/* 👆 Only the border changes on hover */
+.google-btn:hover {
+  border-color: var(--google-btn-hover, #0b57d0);
+  background-color: transparent;
+  color: var(--google-btn-hover, #34A853);
+}
+
+/* 🧯 Remove any focus/active outlines or shadows */
+.google-btn:focus,
+.google-btn:active,
+.google-btn:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+
+
+/* ==========================
+📱 Responsive Styles
+Applies to smaller screens for:
+- .login-container
+- .login-image-container
+- .login-form-container
+========================== */
+
+@media (max-width: 768px) {
   .login-container {
-    width: 90%;
-    max-width: 1400px;
-    height: 80vh;
-    display: flex;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15);
+    flex-direction: column;
+    height: auto;
+    box-shadow: none;
+    border-radius: 0;
   }
-  
-  /* -------------------------------------------------
-  🖼️ Left Side - Image
-  ------------------------------------------------- */
-  
-  /* Affects: <div class="login-image-container">
-     --> Defines the left side width (65%) */
+
   .login-image-container {
-    flex: 0 0 65%;
-    background-color: #f0f2f5;
-    position: relative;
+    flex: 0 0 auto;
+    height: 200px;
   }
-  
-  /* Affects: <img class="login-image">
-     --> Makes the image cover the entire container */
-  .login-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  /* -------------------------------------------------
-  📝 Right Side - Form
-  ------------------------------------------------- */
-  
-  /* Affects: <div class="login-form-container">
-     --> Defines the right side width (35%) and centers content */
+
   .login-form-container {
-    flex: 0 0 35%;
-    background-color: #ffffff;
-    padding: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  /* Affects: <form class="login-form">
-     --> Form dimensions and internal layout */
-  .login-form {
+    flex: 0 0 auto;
     width: 100%;
-    max-width: 400px;
+    padding: 2rem 1.5rem;
   }
-  
-  /* Affects: <h2 class="form-title">
-     --> Login title inside the form */
-  .form-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
-    color: #0066ff;
-    text-align: center;
-  }
-  
-  /* Affects: <div class="form-group"> inside the form
-     --> Styles for input containers */
-  .form-group {
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Affects: <input type="email"> and <input type="password">
-     --> Style inputs inside the form */
-  .form-control {
-    width: 100%;
-    height: 48px;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-  }
-  
-  /* Affects: <span id="togglePassword" class="field-icon toggle-password">
-     --> Eye icon for password toggle */
-  .toggle-password {
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-    font-size: 1.2rem;
-    color: #999;
-    cursor: pointer;
-  }
-  
-  .toggle-password:hover {
-    color: #666;
-  }
-  
-  /* Affects: <div class="form-options">
-     --> Container for "Keep me signed in" + "Forgot password" */
-  .form-options {
-    font-size: 0.9rem;
-    margin-top: 1rem;
-  }
-  
-  /* Affects: <input type="checkbox" class="form-check-input">
-     --> Checkbox alignment */
-  .form-check-input {
-    margin-top: 0.3rem;
-  }
-  
-  /* Affects: <button type="submit" class="btn btn-primary">
-     --> Main login button */
-  .btn-primary {
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 8px;
-    background-color: #0066ff;
-    border: none;
-  }
-  
-  .btn-primary:hover {
-    background-color: #0052cc;
-  }
-  
-  /* Affects: <a class="small-link"> (Forgot password link)
-     --> Styling small text links */
-  .small-link {
-    color: #007bff;
-    text-decoration: none;
-    font-size: 0.85rem;
-  }
-  
-  .small-link:hover {
-    text-decoration: underline;
-  }
-  
-  /* Affects: <div class="text-center mt-3">
-     --> "Don't have an account? Register" section */
-  .small-text {
-    font-size: 0.9rem;
-    color: #666;
-  }
-  
-  /* Affects: <a class="link-primary"> (Register link)
-     --> Styling for Register link */
-  .link-primary {
-    color: #ff6600;
-    font-weight: bold;
-    margin-left: 5px;
-  }
-  
-  .link-primary:hover {
-    color: #e65c00;
-    text-decoration: underline;
-  }
-  
-  /* -------------------------------------------------
-  📱 Responsive Design
-  ------------------------------------------------- */
-  
-  /* On screens smaller than 768px
-     --> Stack image and form vertically */
-  @media (max-width: 768px) {
-  
-    /* Affects: .login-container (main container) */
-    .login-container {
-      flex-direction: column;
-      height: auto;
-      box-shadow: none;
-      border-radius: 0;
-    }
-  
-    /* Affects: .login-image-container (image section) */
-    .login-image-container {
-      flex: 0 0 auto;
-      height: 200px;
-    }
-  
-    /* Affects: .login-form-container (form section) */
-    .login-form-container {
-      flex: 0 0 auto;
-      width: 100%;
-      padding: 2rem 1.5rem;
-    }
-  
-  }
-  
+}
+

@@ -33,7 +33,9 @@ INSTALLED_APPS = [
 
 
     # Your custom apps go here
-    'apps.users'  #login / logout
+    'apps.users',  #login / logout
+    # Libraries for the entire project
+    'core'
 
 ]
 
@@ -204,6 +206,26 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 RECAPTCHA_SITE_KEY = config("RECAPTCHA_SITE_KEY")
 RECAPTCHA_SECRET_KEY = config("RECAPTCHA_SECRET_KEY")
 
+#-----------------------------------
+# 🔑 Google OAuth2 Configuration
+# -----------------------------------
+# Load individual credentials from your .env file
+GOOGLE_OAUTH_CLIENT_ID = config("GOOGLE_OAUTH_CLIENT_ID")
+GOOGLE_OAUTH_CLIENT_SECRET = config("GOOGLE_OAUTH_CLIENT_SECRET")
+GOOGLE_REDIRECT_URI = config("GOOGLE_REDIRECT_URI")
+
+# Create the dictionary that the apps needs to work
+GOOGLE_OAUTH2_CLIENT_CONFIG = {
+    "web": {
+        "client_id": GOOGLE_OAUTH_CLIENT_ID,
+        "client_secret": GOOGLE_OAUTH_CLIENT_SECRET,
+        "redirect_uris": [GOOGLE_REDIRECT_URI],
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+    }
+}
+
+
 # -----------------------------------
 # 📬 Email configuration (loaded from .env)
 # -----------------------------------
@@ -226,4 +248,12 @@ COMPANY_NAME = 'Baobyte'
 # Time for token (mail & token expiration time configuration)
 # -----------------------------------
 # 🔐 Token expiration time (in seconds)
-ACTIVATION_TOKEN_EXPIRY = 180  # 180 seconds =  3 minutes
+ACTIVATION_TOKEN_EXPIRY = 20  # 180 seconds =  3 minutes
+
+# -----------------------------------
+# Constants to determine the maximun number of attempts sending a register token
+# -----------------------------------
+MAX_ATTEMPTS = 3
+MAX_RESEND_COUNT = 3
+MAX_ABANDON_COUNT = 3
+TOKEN_SUFFIX_LENGTH = 15
