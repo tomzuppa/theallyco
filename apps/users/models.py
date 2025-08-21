@@ -14,6 +14,11 @@ from django.db import models
 from django.utils import timezone
 
 
+# ------------------------
+ # Settings of the project (here we determine the custom )
+from django.conf import settings
+
+
 
 # ------------------------
 # 👤 CustomUser model (extends AbstractUser)
@@ -61,6 +66,21 @@ class CustomUser(AbstractUser):
     terms_accepted = models.BooleanField(default=False)
 
 
+    # User Type Choices
+    USER_TYPE_CHOICES = [
+         ('employee', 'Aliad@')
+        ,('client' , 'Cliente')
+        ,('admin'   , 'Administrador')
+    ]
+
+    # User Type Field
+    user_type = models.CharField(
+          max_length = 10
+        , choices=USER_TYPE_CHOICES
+        , default='client'
+        , help_text="Tipo de usuario: empleada doméstica, cliente o admin"
+    )
+
     # 🧼 Force lowercase email and username
     def save(self, *args, **kwargs):
         if self.email:
@@ -74,6 +94,127 @@ class CustomUser(AbstractUser):
         Returns the username for admin display and logging purposes.
         """
         return self.username
+
+
+# ------------------------
+# 👩‍🍳 EmployeeProfile - Extended profile for 'employee' user type
+# ------------------------
+class EmployeeProfile(models.Model):
+    """
+    Extended profile model for users with user_type = 'employee' (Aliad@s del hogar).
+
+    🧭 Used to:
+    - Store personal and professional details of domestic workers
+    - Enable geolocation-based filtering and matching
+    - Attach documents like ID or recommendations
+
+    Referenced in:
+    - Views showing public employee profiles
+    - Auto-created via signals on user registration (see signals.py)
+    """
+    # 🔗 Relation to CustomUser (One-to-One)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='employee_profile'
+    )
+
+    # 🎂 Personal information
+    age = models.PositiveIntegerField(null=True, blank=True)
+    description = models.TextField(blank=True)
+
+    # 💼 Services and availability
+    services_offered = models.TextField(
+        blank=True,
+        help_text="Comma-separated list of services offered (e.g. limpieza, cocina, niños)"
+    )
+    work_area = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="Preferred work area or neighborhood"
+    )
+
+    # 📍 Geolocation (used for maps & search)
+    latitude = models.DecimalField(
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True,
+        help_text="Used to locate the employee on a map"
+    )
+    longitude = models.DecimalField(
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True
+    )
+
+    # 📎 Documents (e.g. ID, references)
+    documents = models.FileField(
+        upload_to='documents/',
+        null=True,
+        blank=True,
+        help_text="Optional documents for identity or references"
+    )
+
+    # ⭐ Reputation system
+    rating = models.FloatField(default=0)
+    total_reviews = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        """
+        Display alias for admin or logging.
+        """
+        return f"Aliad@: {self.user.username}"
+
+
+
+# ------------------------
+# 🧑‍💼 ClientProfile - Extended profile for 'client' user type
+# ------------------------
+class ClientProfile(models.Model):
+    """
+    Extended profile model for users with user_type = 'client' (Employers).
+
+    🧾 Used to:
+    - Store optional billing and payment-related information
+    - Prepare for future subscription or service tracking
+    - Separate client-specific logic from the core user model
+
+    Referenced in:
+    - Views for client dashboards
+    - Auto-created via signals on user registration (see signals.py)
+    """
+
+    # 🔗 Relation to CustomUser (One-to-One)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='client_profile'
+    )
+
+    # 💳 Payment setup (future use with Stripe, PayPal, etc.)
+    default_payment_method = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text="Reference ID for preferred payment method"
+    )
+
+    billing_address = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Optional billing address (used for invoices)"
+    )
+
+    # 🧾 Subscription status
+    subscription_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        """
+        Display alias for admin or logging.
+        """
+        return f"Cliente: {self.user.username}"
+
 
 
 # ------------------------

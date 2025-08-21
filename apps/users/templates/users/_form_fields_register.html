@@ -60,6 +60,14 @@
   {% endif %}
 </div>
 
+<!-- 👤 User Type (Client or House Ally) -->
+<div class="mb-3">
+  {% render_input form.user_type "User Type" disable_fields %}
+  {% if form.user_type.errors %}
+    <div class="text-danger small">{{ form.user_type.errors }}</div>
+  {% endif %}
+</div>
+
 <!-- 📜 Terms Checkbox (manual since it's not a Django field) -->
 <div class="form-check mb-3">
   <input class="form-check-input"

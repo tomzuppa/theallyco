@@ -1,0 +1,44 @@
+📌 ESTADO Y NAVEGACIÓN
+    Comando	Para qué sirve
+        git status	Ver en qué branch estás y si hay cambios pendientes
+        git branch	Listar ramas locales y ver cuál está activa
+        git branch -r	Ver ramas remotas (las que están en GitHub)
+        git remote -v	Ver URL del repositorio remoto conectado
+📦 💾 COMMITS Y CAMBIOS
+    Comando	Para qué sirve
+        git add .	Agrega todos los archivos modificados al "staging area"
+        git commit -m "Mensaje"	Crea un commit con mensaje
+        git log --oneline -n 10	Ver los últimos 10 commits breves
+        git diff	Ver cambios pendientes no comiteados
+🚀 🌐 PUSH & PULL
+    Comando	Para qué sirve
+        git push origin main	Sube tus cambios al branch main remoto
+        git pull origin main	Baja los últimos cambios de main remoto
+        git fetch	Actualiza referencias remotas sin hacer merge automático
+        git clone URL .	Clona repo en carpeta actual
+🌿 🌱 RAMAS Y MERGE
+    Comando	Para qué sirve
+        git checkout -b nombre	Crea y cambia a una nueva rama
+        git checkout main	Cambia de rama (ej. a main)
+        git merge rama-b	Trae los cambios de rama-b a la rama actual
+        git branch -d nombre	Borra rama local
+        git push origin --delete nombre	Borra rama remota
+🏷️ 🏁 TAGS Y RELEASES
+    Comando	Para qué sirve
+        git tag v1.0	Crea un tag en el commit actual
+        git push origin v1.0	Sube el tag a GitHub
+🧼 💣 REPARACIONES (cuando algo truena)
+    Comando	Para qué sirve
+        git stash	Guarda cambios sin commit para no perderlos
+        git stash pop	Recupera los cambios guardados
+        git reset --hard	⚠️ Revierte todo al último commit (pierdes cambios no guardados)
+        git clean -fd	⚠️ Borra archivos y carpetas no versionados
+
+
+----------------
+  git add .
+  git commit -m " "
+  git push origin main
+  git tag ""
+  git push origin ""
+  

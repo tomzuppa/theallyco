@@ -10,3 +10,12 @@ class UsersConfig(AppConfig):
     # 🗂️ Defines the dotted path to the app — important for app registry and template resolution
     # Impacts: Required for Django to correctly locate templates, static files, and models in 'apps.users'
     name = 'apps.users'
+
+
+# Signal activated for new customers
+class UsersConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'apps.users'
+
+    def ready(self):
+        import apps.users.signals  # 👈 Signal activated for new customers

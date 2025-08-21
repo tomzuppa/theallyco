@@ -79,6 +79,18 @@ class RegisterForm(forms.ModelForm):
         choices=[('en', 'English'), ('es', 'Español'), ('fr', 'Français')],
         widget=forms.Select(attrs={'class': 'login-dark-input'})
     )
+# ------------------------
+# 👤 User Type (Ally or Client)
+# ------------------------
+    user_type = forms.ChoiceField(
+        label="User Type",
+        choices=[
+            ('employee', 'House Ally'),
+            ('client', 'Client')
+        ],
+        widget=forms.Select(attrs={'class': 'login-dark-input'}),
+        required=True
+    )
 
     class Meta:
         model = User
@@ -116,12 +128,28 @@ class RegisterForm(forms.ModelForm):
         return password2
 
     def save(self, commit=True):
+        """
+        Saves the user instance with additional fields like:
+        - password (hashed)
+        - user_type (employee or client)
+        - optional profile info
+
+        Used during registration flow.
+        """
         user = super().save(commit=False)
+        # Hash the password
         user.set_password(self.cleaned_data["password1"])
+        # Set user as active (can change this to require verification later)
         user.is_active = True
+        # Set user_type from the form selection
+        user.user_type = self.cleaned_data.get("user_type")
+        # Save the user
         if commit:
             user.save()
         return user
+
+
+
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request", None)
